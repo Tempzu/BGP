@@ -1,0 +1,27 @@
+Plan how we shall proceed:
+
+Basic BGP
+- Each router must construct a routing table. The tables need to be customizable so that the administrator can enforce local policies.
+- Define the BGP protocol processing and functionality for the routers: (routers set up TCP connections between each other and pass BGP messages, routers have their own policies and processing choices)
+  - KEEPALIVE etc. messages must be used.
+- Simulate error conditions, e.g. a router goes offline and a link is dropped.
+
+What needs to be done:
+
+Topology:
+- Each router gets a "cold start" meaning it needs to discover its neighbors and start building a routing table.
+- The network topology must be customizable (for each simulation, the links between routers can be specified by the designer).
+
+Trust and voting:
+- Implement trust between routers
+    Either as new BGP message type
+    Or as an agent-based information exchange
+- Implement voting as described in lectures
+  - Neighbors of neighbors vote on neighbor
+  - Use vote result and direct trust to form ”total trust” that is passed to other routers (direct trust you can specify yourself). You can include weighing of direct and voted trust in your evaluation.
+  -  Decide on a way to use the trust value in making your routing decision.
+  -  You can make the specification and implementation of trust quite freely, as long as there is some kind of voting-based trust value, trust value exchange and trust value based routing decisions.
+  
+IP packets:
+- Define the IP functionality: actual packet processing according to the routing algorithm.
+- Obtain or manually create suitable IP packets for the simulation. The expectation is that the router receives the packets as a stream of bits from the data link layer, so the router will need to figure out header fields from the bit stream. However, you can expect that each packet fits into a single data link layer frame, meaning that each packet is a well defined group of ones and zeros (you do not need to figure out when one packet ends and another one starts as long as you manipulate the packet at the bit level).
