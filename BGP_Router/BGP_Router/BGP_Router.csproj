@@ -44,16 +44,19 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BGP\Router.cs" />
+    <Compile Include="Masiina\Class1.cs" />
+    <Compile Include="Messages\KeepaAlive.cs" />
+    <Compile Include="Messages\Notification.cs" />
+    <Compile Include="Messages\Open.cs" />
+    <Compile Include="Messages\Structure.cs" />
+    <Compile Include="Messages\Update.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Masiina\" />
-    <Folder Include="Messages\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
