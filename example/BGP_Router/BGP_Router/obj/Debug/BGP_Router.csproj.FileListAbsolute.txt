@@ -1,1 +1,0 @@
-c:\users\ville\documents\visual studio 2015\Projects\BGP_Router\BGP_Router\bin\Debug\BGP_Router.exe.config
