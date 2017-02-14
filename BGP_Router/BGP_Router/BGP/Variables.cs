@@ -19,15 +19,15 @@ namespace BGP_Router.BGP
         public static ushort AS1 = 1;
         public static ushort AS2 = 2;
         public static ushort AS3 = 3;
-        public static string prefixAS1 = "127.1";
-        public static string prefixAS2 = "127.2";
-        public static string prefixAS3 = "127.3";
-        public static string as1_IP_Prefix = "127.1.0.";
-        public static string as2_IP_Prefix = "127.2.0.";
-        public static string as3_IP_Prefix = "127.3.0.";
+        public static string PrefixAS1 = "127.1";
+        public static string PrefixAS2 = "127.2";
+        public static string PrefixAS3 = "127.3";
+        public static string As1_IP_Prefix = "127.1.0.";
+        public static string As2_IP_Prefix = "127.2.0.";
+        public static string As3_IP_Prefix = "127.3.0.";
         //public static ushort autonomousSystemSpeaker;
         //public static ushort autonomousSystemListner;
-        public static ushort packetAS;
+        public static ushort AacketAS;
         public static int ListenerConnectionCount;
         public static int SpeakerConnectionCount;
         public static int CurrentSpeakerCount;
@@ -51,31 +51,31 @@ namespace BGP_Router.BGP
 
         //connectCount and Listner
         //ConcurrentDictionary is used for the thread safety
-        public static ConcurrentDictionary<string, ushort> speaker_AS = new ConcurrentDictionary<string, ushort>();
-        public static ConcurrentDictionary<string, ushort> listner_AS = new ConcurrentDictionary<string, ushort>();
-        public static ConcurrentDictionary<int, string> conAnd_Listner = new ConcurrentDictionary<int, string>();
-        public static ConcurrentDictionary<int, string> conAnd_Speaker = new ConcurrentDictionary<int, string>();
+        public static ConcurrentDictionary<string, ushort> SpeakerAS = new ConcurrentDictionary<string, ushort>();
+        public static ConcurrentDictionary<string, ushort> ListenerAS = new ConcurrentDictionary<string, ushort>();
+        public static ConcurrentDictionary<int, string> ConnectionAndListener = new ConcurrentDictionary<int, string>();
+        public static ConcurrentDictionary<int, string> ConnectionAndSpeaker = new ConcurrentDictionary<int, string>();
 
-        public static ConcurrentDictionary<ushort, ushort> speakerConAnd_AS = new ConcurrentDictionary<ushort, ushort>();
-        public static ConcurrentDictionary<ushort, ushort> listnerConAnd_AS = new ConcurrentDictionary<ushort, ushort>();
-        public static ConcurrentDictionary<int, Socket> listnerSocket_Dictionary = new ConcurrentDictionary<int, Socket>();
-        public static ConcurrentDictionary<int, Socket> SpeakerSocket_Dictionary = new ConcurrentDictionary<int, Socket>();
-        public static bool[] successfulConnection = new bool[14];
+        public static ConcurrentDictionary<ushort, ushort> SpeakerConnectionAndAS = new ConcurrentDictionary<ushort, ushort>();
+        public static ConcurrentDictionary<ushort, ushort> ListenerConnectionAndAS = new ConcurrentDictionary<ushort, ushort>();
+        public static ConcurrentDictionary<int, Socket> ListenerSocketDictionary = new ConcurrentDictionary<int, Socket>();
+        public static ConcurrentDictionary<int, Socket> SpeakerSocketDictionary = new ConcurrentDictionary<int, Socket>();
+        public static bool[] SuccessfulConnection = new bool[14];
 
         //UPDATE Variables
-        public static Dictionary<int, Tuple<string, ushort, string, ushort>> conSpeakerAs_ListnerAs = new Dictionary<int, Tuple<string, ushort, string, ushort>>();
-        public static DataTable data = new DataTable();
+        public static Dictionary<int, Tuple<string, ushort, string, ushort>>ConnectionSpeakerAs_ListenerAs = new Dictionary<int, Tuple<string, ushort, string, ushort>>();
+        public static DataTable Data = new DataTable();
         public static Dictionary<int, Tuple<int, string, int, string, int, int, string, Tuple<string>>> Adj_RIB_Out = new Dictionary<int, Tuple<int, string, int, string, int, int, string, Tuple<string>>>();
         public static Dictionary<int, Tuple<int, string>> NLRI = new Dictionary<int, Tuple<int, string>>();
-        public static Dictionary<int, Tuple<int, string, int, ushort>> pathAttribute = new Dictionary<int, Tuple<int, string, int, ushort>>();
-        public static string withdrawl_IP_Address;
-        public static int withdrawl_Length;
-        public static Dictionary<int, Tuple<string, int>> withdrawnRoutes = new Dictionary<int, Tuple<string, int>>();
-        public static Dictionary<int, Tuple<int, string>> pathSegment = new Dictionary<int, Tuple<int, string>>();
-        public static Dictionary<int, string> interASConIP = new Dictionary<int, string>();
+        public static Dictionary<int, Tuple<int, string, int, ushort>> PathAttribute = new Dictionary<int, Tuple<int, string, int, ushort>>();
+        public static string Withdrawl_IP_Address;
+        public static int Withdrawl_Length;
+        public static Dictionary<int, Tuple<string, int>> WithdrawnRoutes = new Dictionary<int, Tuple<string, int>>();
+        public static Dictionary<int, Tuple<int, string>> PathSegment = new Dictionary<int, Tuple<int, string>>();
+        public static Dictionary<int, string> InterAS_IP = new Dictionary<int, string>();
         //Notification Message Variables
-        public static ushort errorCode = 6;
-        public static ushort errorSubCode = 8;
+        public static ushort ErrorCode = 6;
+        public static ushort ErrorSubCode = 8;
 
     }
 }
