@@ -5,11 +5,11 @@ using BGPSimulator.FSM;
 using System.Net;
 using System.Threading;
 
-namespace BGPSimulator.BGP
+namespace BGP_Router.BGP
 {
-    public class InitilizeBGPListnerSpeaker 
+    public class InitilizeBGPListenerSpeaker
     {
-        public static BGPListner[] bgpListner = new BGPListner[10];
+        public static BGPListener[] bgpListener = new BGPListener[10];
         public static BGPSpeaker[] bgpSpeaker = new BGPSpeaker[15];
 
         private static AutoResetEvent speakerConnectionRequest = new AutoResetEvent(true);
@@ -27,23 +27,25 @@ namespace BGPSimulator.BGP
         int as3First;
         string temp;
 
-        public void StartListner()
+        public void StartListener()
         {
             Console.WriteLine("There is a total of 10 routers which will be split into 3 AS. How many routers do you want in AS1? (1-8)");
             temp = Console.ReadLine();
             try
             {
                 as1Last = int.Parse(temp) - 1; //-1 since routers start from 0 
-                if(as1Last < 0)
+                if (as1Last < 0)
                 {
                     Console.WriteLine("The character you typed wasn't in the given bounds, so we set 1 routers in the AS1.");
                     as1Last = 0;
-                }else if(as1Last > 7)
+                }
+                else if (as1Last > 7)
                 {
                     Console.WriteLine("The character you typed wasn't in the given bounds, so we set 8 routers in the AS1.");
                     as1Last = 7;
                 }
-            }catch 
+            }
+            catch
             {
                 Console.WriteLine("The character you typed wasn't a number, so we set 3 routers to AS1.");
                 as1Last = 2;
@@ -54,14 +56,15 @@ namespace BGPSimulator.BGP
                 if (as1Last > 0)
                 {
                     Console.WriteLine("How many routers do you want in AS2? (1-" + (8 - as1Last) + "). Rest will be placed AS3.");
-                }else
+                }
+                else
                 {
                     Console.WriteLine("How many routers do you want in AS2? (1-8). Rest will be placed AS3.");
                 }
                 temp = Console.ReadLine();
                 try
                 {
-                    as2Last = as1Last + int.Parse(temp); 
+                    as2Last = as1Last + int.Parse(temp);
                     if (as2Last <= as1Last)
                     {
                         Console.WriteLine("The character you typed wasn't in the given bounds, so we set 1 routers in the AS2.");
@@ -78,7 +81,7 @@ namespace BGPSimulator.BGP
                     Console.WriteLine("The character you typed wasn't a number, so we set 4 routers to AS2.");
                     as2Last = as1Last + 4; ;
                 }
-                as3First = as2Last + 1; 
+                as3First = as2Last + 1;
             }
             else
             {
@@ -87,135 +90,137 @@ namespace BGPSimulator.BGP
                 as2Last = as2First;
                 as3First = 9;
             }
-            
+
 
             for (int i = 0; i < 10; i++)
             {
-                
-                bgpListner[i] = new BGPListner();
+
+                bgpListener[i] = new BGPListener();
                 if (i < as2First)
                 {
-                    AS = GlobalVariables.AS1;
-                    GlobalVariables.listnerConAnd_AS.TryAdd((ushort)i, AS);
-                    bgpListner[i].BindListner(GlobalVariables.as1_IP_peifix + i, GlobalVariables.listnerPortNumber, i);
-                    GlobalVariables.listner_AS.TryAdd(GlobalVariables.as1_IP_peifix + i, AS);
-                    
+                    AS = Variables.AS1;
+                    Variables.ListenerConnectionAndAS.TryAdd((ushort)i, AS);
+                    bgpListener[i].BindListener(Variables.As1_IP_Prefix + i, Variables.ListenerPortNumber, i);
+                    Variables.ListenerAS.TryAdd(Variables.As1_IP_Prefix + i, AS);
 
-                }else if (i > as1Last && i < as3First)
+
+                }
+                else if (i > as1Last && i < as3First)
                 {
-                    AS = GlobalVariables.AS2;
-                    GlobalVariables.listnerConAnd_AS.TryAdd((ushort)i, AS);
-                    bgpListner[i].BindListner(GlobalVariables.as2_IP_Prefix + i, GlobalVariables.listnerPortNumber, i);
-                    GlobalVariables.listner_AS.TryAdd(GlobalVariables.as2_IP_Prefix + i, AS);
-                    
-                } else if (i> as2First && i<10)
+                    AS = Variables.AS2;
+                    Variables.ListenerConnectionAndAS.TryAdd((ushort)i, AS);
+                    bgpListener[i].BindListener(Variables.As2_IP_Prefix + i, Variables.ListenerPortNumber, i);
+                    Variables.ListenerAS.TryAdd(Variables.As2_IP_Prefix + i, AS);
+
+                }
+                else if (i > as2First && i < 10)
                 {
-                    AS = GlobalVariables.AS3;
-                    GlobalVariables.listnerConAnd_AS.TryAdd((ushort)i, AS);
-                    bgpListner[i].BindListner(GlobalVariables.as3_IP_Prefix + i, GlobalVariables.listnerPortNumber, i);
-                    GlobalVariables.listner_AS.TryAdd(GlobalVariables.as3_IP_Prefix + i, AS);
-                    
+                    AS = Variables.AS3;
+                    Variables.ListenerConnectionAndAS.TryAdd((ushort)i, AS);
+                    bgpListener[i].BindListener(Variables.As3_IP_Prefix + i, Variables.ListenerPortNumber, i);
+                    Variables.ListenerAS.TryAdd(Variables.As3_IP_Prefix + i, AS);
+
                 }
 
                 Thread.Sleep(500);
                 //recient computers can handle 500 connections
             }
-           
+
 
         }
-        
 
-        public void StartListning()
+
+        public void StartListening()
         {
-           
+
 
             for (int i = 0; i < 10; i++)
             {
-                    bgpListner[i].Listen(10);
-                    bgpListner[i].Accept();
+                bgpListener[i].Listen(10);
+                bgpListener[i].Accept();
             }
 
-            
+
         }
         public void StartSpeaker()
         {
             for (int k = 0; k < 10; k++)
             {
-                
+
 
                 bgpSpeaker[m] = new BGPSpeaker();
-                
+
                 if (k < as2First)
                 {
-                    AS = GlobalVariables.AS1;
-                    if( k == as1Last)
+                    AS = Variables.AS1;
+                    if (k == as1Last)
                     {
-                        
-                        bgpSpeaker[m].BindSpeaker(GlobalVariables.as1_IP_peifix + k, GlobalVariables.speakerPortNumber, m);
-                        GlobalVariables.speaker_AS.TryAdd(GlobalVariables.as1_IP_peifix + k, AS);
-                       
+
+                        bgpSpeaker[m].BindSpeaker(Variables.As1_IP_Prefix + k, Variables.SpeakerPortNumber, m);
+                        Variables.SpeakerAS.TryAdd(Variables.As1_IP_Prefix + k, AS);
+
                         m++;
                         bgpSpeaker[m] = new BGPSpeaker();
-                        bgpSpeaker[m].BindSpeaker(GlobalVariables.as1_IP_peifix + k, GlobalVariables.speakerPortNumber+1, m);
-                        
+                        bgpSpeaker[m].BindSpeaker(Variables.As1_IP_Prefix + k, Variables.SpeakerPortNumber + 1, m);
+
                     }
-                    else if(k < as1Last)
+                    else if (k < as1Last)
                     {
-                        
-                        bgpSpeaker[m].BindSpeaker(GlobalVariables.as1_IP_peifix + k, GlobalVariables.speakerPortNumber, m);
-                        GlobalVariables.speaker_AS.TryAdd(GlobalVariables.as1_IP_peifix + k, AS);
-                      
+
+                        bgpSpeaker[m].BindSpeaker(Variables.As1_IP_Prefix + k, Variables.SpeakerPortNumber, m);
+                        Variables.SpeakerAS.TryAdd(Variables.As1_IP_Prefix + k, AS);
+
                     }
-                    
+
                 }
                 else if (k > as1Last && k < as3First)
                 {
-                    AS = GlobalVariables.AS2;
-                    if ( k == as2First)
+                    AS = Variables.AS2;
+                    if (k == as2First)
                     {
-                        bgpSpeaker[m].BindSpeaker(GlobalVariables.as2_IP_Prefix + k, GlobalVariables.speakerPortNumber, m);
-                        GlobalVariables.speaker_AS.TryAdd(GlobalVariables.as2_IP_Prefix + k, AS);
+                        bgpSpeaker[m].BindSpeaker(Variables.As2_IP_Prefix + k, Variables.SpeakerPortNumber, m);
+                        Variables.SpeakerAS.TryAdd(Variables.As2_IP_Prefix + k, AS);
                         m++;
                         bgpSpeaker[m] = new BGPSpeaker();
-                        bgpSpeaker[m].BindSpeaker(GlobalVariables.as2_IP_Prefix + k, GlobalVariables.speakerPortNumber+1, m);
+                        bgpSpeaker[m].BindSpeaker(Variables.As2_IP_Prefix + k, Variables.SpeakerPortNumber + 1, m);
                     }
-                    else if ( k == as2Last)
+                    else if (k == as2Last)
                     {
-                        bgpSpeaker[m].BindSpeaker(GlobalVariables.as2_IP_Prefix + k, GlobalVariables.speakerPortNumber, m);
-                        GlobalVariables.speaker_AS.TryAdd(GlobalVariables.as2_IP_Prefix + k, AS);
+                        bgpSpeaker[m].BindSpeaker(Variables.As2_IP_Prefix + k, Variables.SpeakerPortNumber, m);
+                        Variables.SpeakerAS.TryAdd(Variables.As2_IP_Prefix + k, AS);
                         m++;
                         bgpSpeaker[m] = new BGPSpeaker();
-                        bgpSpeaker[m].BindSpeaker(GlobalVariables.as2_IP_Prefix + k, GlobalVariables.speakerPortNumber+1, m);
+                        bgpSpeaker[m].BindSpeaker(Variables.As2_IP_Prefix + k, Variables.SpeakerPortNumber + 1, m);
                         m++;
                         bgpSpeaker[m] = new BGPSpeaker();
-                        bgpSpeaker[m].BindSpeaker(GlobalVariables.as2_IP_Prefix + k, GlobalVariables.speakerPortNumber+2, m);
+                        bgpSpeaker[m].BindSpeaker(Variables.As2_IP_Prefix + k, Variables.SpeakerPortNumber + 2, m);
                     }
                     else if (as2First < k && k < as2Last)
                     {
-                        bgpSpeaker[m].BindSpeaker(GlobalVariables.as2_IP_Prefix + k, GlobalVariables.speakerPortNumber, m);
-                        GlobalVariables.speaker_AS.TryAdd(GlobalVariables.as2_IP_Prefix + k, AS);
+                        bgpSpeaker[m].BindSpeaker(Variables.As2_IP_Prefix + k, Variables.SpeakerPortNumber, m);
+                        Variables.SpeakerAS.TryAdd(Variables.As2_IP_Prefix + k, AS);
                     }
-                    
+
 
                 }
-                else if (k> as2Last && k < 9)
+                else if (k > as2Last && k < 9)
                 {
-                    AS = GlobalVariables.AS3;
+                    AS = Variables.AS3;
 
-                    bgpSpeaker[m].BindSpeaker(GlobalVariables.as3_IP_Prefix + k, GlobalVariables.speakerPortNumber, m);
+                    bgpSpeaker[m].BindSpeaker(Variables.As3_IP_Prefix + k, Variables.SpeakerPortNumber, m);
 
-                    GlobalVariables.speaker_AS.TryAdd(GlobalVariables.as3_IP_Prefix + k, AS);
-                    
+                    Variables.SpeakerAS.TryAdd(Variables.As3_IP_Prefix + k, AS);
+
 
                 }
                 else if (k == 9)
                 {
-                    AS = GlobalVariables.AS3;
-                    bgpSpeaker[m].BindSpeaker(GlobalVariables.as3_IP_Prefix + k, GlobalVariables.speakerPortNumber, m);
-                    GlobalVariables.speaker_AS.TryAdd(GlobalVariables.as3_IP_Prefix + k, AS);
+                    AS = Variables.AS3;
+                    bgpSpeaker[m].BindSpeaker(Variables.As3_IP_Prefix + k, Variables.SpeakerPortNumber, m);
+                    Variables.SpeakerAS.TryAdd(Variables.As3_IP_Prefix + k, AS);
                     m++;
                     bgpSpeaker[m] = new BGPSpeaker();
-                    bgpSpeaker[m].BindSpeaker(GlobalVariables.as2_IP_Prefix + k, GlobalVariables.speakerPortNumber + 1, m);
+                    bgpSpeaker[m].BindSpeaker(Variables.As3_IP_Prefix + k, Variables.SpeakerPortNumber + 1, m);
 
                 }
 
@@ -236,33 +241,33 @@ namespace BGPSimulator.BGP
                 if (k < as2First)
                 {
 
-                    GlobalVariables.speakerConAnd_AS.TryAdd((ushort)n, GlobalVariables.AS1);
-                    GlobalVariables.connCountListner = n;
+                    Variables.SpeakerConnectionAndAS.TryAdd((ushort)n, Variables.AS1);
+                    Variables.ListenerConnectionCount = n;
                     if (k == as1Last) //creating connection which connects to the first router of AS2
                     {
-                        bgpSpeaker[n].Connect(GlobalVariables.as2_IP_Prefix + (k + 1), GlobalVariables.listnerPortNumber, k, k + 1);
+                        bgpSpeaker[n].Connect(Variables.As2_IP_Prefix + (k + 1), Variables.ListenerPortNumber, k, k + 1);
 
-                        GlobalVariables.conAnd_Listner.TryAdd(n, GlobalVariables.as2_IP_Prefix + (k + 1));
-                        GlobalVariables.conAnd_Speaker.TryAdd(n, GlobalVariables.as1_IP_peifix + k);
-                        SendOpenMessageToListner(n);
+                        Variables.ConnectionAndListener.TryAdd(n, Variables.As2_IP_Prefix + (k + 1));
+                        Variables.ConnectionAndSpeaker.TryAdd(n, Variables.As1_IP_Prefix + k);
+                        SendOpenMessageToListener(n);
 
                         if (1 < as1Last) //more connections are created to AS1 depending on the size of AS1
                         {
                             n++;
-                            GlobalVariables.speakerConAnd_AS.TryAdd((ushort)n, GlobalVariables.AS1);
-                            bgpSpeaker[n].Connect(GlobalVariables.as1_IP_peifix + (k - 2), GlobalVariables.listnerPortNumber, k, k - 2);
-                            GlobalVariables.conAnd_Listner.TryAdd(n, GlobalVariables.as1_IP_peifix + (k - 2));
-                            GlobalVariables.conAnd_Speaker.TryAdd(n, GlobalVariables.as1_IP_peifix + k);
-                            SendOpenMessageToListner(n);
+                            Variables.SpeakerConnectionAndAS.TryAdd((ushort)n, Variables.AS1);
+                            bgpSpeaker[n].Connect(Variables.As1_IP_Prefix + (k - 2), Variables.ListenerPortNumber, k, k - 2);
+                            Variables.ConnectionAndListener.TryAdd(n, Variables.As1_IP_Prefix + (k - 2));
+                            Variables.ConnectionAndSpeaker.TryAdd(n, Variables.As1_IP_Prefix + k);
+                            SendOpenMessageToListener(n);
                         }
 
                     }
                     else if (0 < as1Last) //creating normal connections to AS1 (n -> n+1 )
                     {
-                        bgpSpeaker[n].Connect(GlobalVariables.as1_IP_peifix + (k + 1), GlobalVariables.listnerPortNumber, k, k + 1);
-                        GlobalVariables.conAnd_Listner.TryAdd(n, GlobalVariables.as1_IP_peifix + (k + 1));
-                        GlobalVariables.conAnd_Speaker.TryAdd(n, GlobalVariables.as1_IP_peifix + k);
-                        SendOpenMessageToListner(n);
+                        bgpSpeaker[n].Connect(Variables.As1_IP_Prefix + (k + 1), Variables.ListenerPortNumber, k, k + 1);
+                        Variables.ConnectionAndListener.TryAdd(n, Variables.As1_IP_Prefix + (k + 1));
+                        Variables.ConnectionAndSpeaker.TryAdd(n, Variables.As1_IP_Prefix + k);
+                        SendOpenMessageToListener(n);
 
                     }
 
@@ -272,94 +277,94 @@ namespace BGPSimulator.BGP
                 else if (k > as1Last && k < as3First) //creating connections to AS2
                 {
 
-                    GlobalVariables.speakerConAnd_AS.TryAdd((ushort)n, GlobalVariables.AS2);
-                    GlobalVariables.connCountListner = n;
+                    Variables.SpeakerConnectionAndAS.TryAdd((ushort)n, Variables.AS2);
+                    Variables.ListenerConnectionCount = n;
                     if (k == as2First && (as2Last - as2First) > 0) //more connections are created to AS2 depending on the size of AS2
                     {
-                        bgpSpeaker[n].Connect(GlobalVariables.as2_IP_Prefix + (k + 1), GlobalVariables.listnerPortNumber, k, k + 1);
-                        GlobalVariables.conAnd_Listner.TryAdd(n, GlobalVariables.as2_IP_Prefix + (k + 1));
-                        GlobalVariables.conAnd_Speaker.TryAdd(n, GlobalVariables.as2_IP_Prefix + k);
-                        SendOpenMessageToListner(n);
-                        if (k == as2First && (as2Last - as2First) > 1) 
+                        bgpSpeaker[n].Connect(Variables.As2_IP_Prefix + (k + 1), Variables.ListenerPortNumber, k, k + 1);
+                        Variables.ConnectionAndListener.TryAdd(n, Variables.As2_IP_Prefix + (k + 1));
+                        Variables.ConnectionAndSpeaker.TryAdd(n, Variables.As2_IP_Prefix + k);
+                        SendOpenMessageToListener(n);
+                        if (k == as2First && (as2Last - as2First) > 1)
                         {
                             n++;
-                            GlobalVariables.speakerConAnd_AS.TryAdd((ushort)n, GlobalVariables.AS2);
-                            bgpSpeaker[n].Connect(GlobalVariables.as2_IP_Prefix + (k + 2), GlobalVariables.listnerPortNumber, k, k + 2);
-                            GlobalVariables.conAnd_Listner.TryAdd(n, GlobalVariables.as2_IP_Prefix + (k + 2));
-                            GlobalVariables.conAnd_Speaker.TryAdd(n, GlobalVariables.as2_IP_Prefix + k);
-                            SendOpenMessageToListner(n);
+                            Variables.SpeakerConnectionAndAS.TryAdd((ushort)n, Variables.AS2);
+                            bgpSpeaker[n].Connect(Variables.As2_IP_Prefix + (k + 2), Variables.ListenerPortNumber, k, k + 2);
+                            Variables.ConnectionAndListener.TryAdd(n, Variables.As2_IP_Prefix + (k + 2));
+                            Variables.ConnectionAndSpeaker.TryAdd(n, Variables.As2_IP_Prefix + k);
+                            SendOpenMessageToListener(n);
                         }
                     }
-                   
+
                     else if (k == as2Last) //creating connection which connects to the first router of AS3
                     {
-                        bgpSpeaker[n].Connect(GlobalVariables.as3_IP_Prefix + (k + 1), GlobalVariables.listnerPortNumber, k, k + 1);
-                        GlobalVariables.conAnd_Listner.TryAdd(n, GlobalVariables.as3_IP_Prefix + (k + 1));
-                        GlobalVariables.conAnd_Speaker.TryAdd(n, GlobalVariables.as2_IP_Prefix + k);
-                        SendOpenMessageToListner(n);
+                        bgpSpeaker[n].Connect(Variables.As3_IP_Prefix + (k + 1), Variables.ListenerPortNumber, k, k + 1);
+                        Variables.ConnectionAndListener.TryAdd(n, Variables.As3_IP_Prefix + (k + 1));
+                        Variables.ConnectionAndSpeaker.TryAdd(n, Variables.As2_IP_Prefix + k);
+                        SendOpenMessageToListener(n);
 
 
                         if ((as2Last - as2First) > 1) //more connections are created to AS2 depending on the size of AS2
                         {
                             n++;
-                            GlobalVariables.speakerConAnd_AS.TryAdd((ushort)n, GlobalVariables.AS2);
-                            bgpSpeaker[n].Connect(GlobalVariables.as2_IP_Prefix + (k - 2), GlobalVariables.listnerPortNumber, k, k - 2);
-                            GlobalVariables.conAnd_Listner.TryAdd(n, GlobalVariables.as2_IP_Prefix + (k - 2));
-                            GlobalVariables.conAnd_Speaker.TryAdd(n, GlobalVariables.as2_IP_Prefix + k);
-                            SendOpenMessageToListner(n);
+                            Variables.SpeakerConnectionAndAS.TryAdd((ushort)n, Variables.AS2);
+                            bgpSpeaker[n].Connect(Variables.As2_IP_Prefix + (k - 2), Variables.ListenerPortNumber, k, k - 2);
+                            Variables.ConnectionAndListener.TryAdd(n, Variables.As2_IP_Prefix + (k - 2));
+                            Variables.ConnectionAndSpeaker.TryAdd(n, Variables.As2_IP_Prefix + k);
+                            SendOpenMessageToListener(n);
                             if ((as2Last - as2First) > 2)
                             {
                                 n++;
-                                GlobalVariables.speakerConAnd_AS.TryAdd((ushort)n, GlobalVariables.AS2);
-                                bgpSpeaker[n].Connect(GlobalVariables.as2_IP_Prefix + (k - 3), GlobalVariables.listnerPortNumber, k, k - 3);
-                                GlobalVariables.conAnd_Listner.TryAdd(n, GlobalVariables.as2_IP_Prefix + (k - 3));
-                                GlobalVariables.conAnd_Speaker.TryAdd(n, GlobalVariables.as2_IP_Prefix + k);
-                                SendOpenMessageToListner(n);
+                                Variables.SpeakerConnectionAndAS.TryAdd((ushort)n, Variables.AS2);
+                                bgpSpeaker[n].Connect(Variables.As2_IP_Prefix + (k - 3), Variables.ListenerPortNumber, k, k - 3);
+                                Variables.ConnectionAndListener.TryAdd(n, Variables.As2_IP_Prefix + (k - 3));
+                                Variables.ConnectionAndSpeaker.TryAdd(n, Variables.As2_IP_Prefix + k);
+                                SendOpenMessageToListener(n);
                             }
                         }
 
                     }
                     else if (as2First < k && k < as2Last) //creating normal connections to AS2 (n -> n+1 )
                     {
-                        bgpSpeaker[n].Connect(GlobalVariables.as2_IP_Prefix + (k + 1), GlobalVariables.listnerPortNumber, k, k + 1);
+                        bgpSpeaker[n].Connect(Variables.As2_IP_Prefix + (k + 1), Variables.ListenerPortNumber, k, k + 1);
 
-                        GlobalVariables.conAnd_Listner.TryAdd(n, GlobalVariables.as2_IP_Prefix + (k + 1));
-                        GlobalVariables.conAnd_Speaker.TryAdd(n, GlobalVariables.as2_IP_Prefix + k);
-                        SendOpenMessageToListner(n);
+                        Variables.ConnectionAndListener.TryAdd(n, Variables.As2_IP_Prefix + (k + 1));
+                        Variables.ConnectionAndSpeaker.TryAdd(n, Variables.As2_IP_Prefix + k);
+                        SendOpenMessageToListener(n);
                     }
 
 
 
 
                 }
-                
-                else if (k > as2Last && k < 9) 
+
+                else if (k > as2Last && k < 9)
                 {
 
-                    GlobalVariables.speakerConAnd_AS.TryAdd((ushort)n, GlobalVariables.AS3);
-                    GlobalVariables.connCountListner = n;
+                    Variables.SpeakerConnectionAndAS.TryAdd((ushort)n, Variables.AS3);
+                    Variables.ListenerConnectionCount = n;
                     //creating normal connections to AS3 (n -> n+1 )
-                    bgpSpeaker[n].Connect(GlobalVariables.as3_IP_Prefix + (k + 1), GlobalVariables.listnerPortNumber, k, k + 1);
-                    GlobalVariables.conAnd_Listner.TryAdd(n, GlobalVariables.as3_IP_Prefix + (k + 1));
-                    GlobalVariables.conAnd_Speaker.TryAdd(n, GlobalVariables.as3_IP_Prefix + k);
-                    SendOpenMessageToListner(n);
+                    bgpSpeaker[n].Connect(Variables.As3_IP_Prefix + (k + 1), Variables.ListenerPortNumber, k, k + 1);
+                    Variables.ConnectionAndListener.TryAdd(n, Variables.As3_IP_Prefix + (k + 1));
+                    Variables.ConnectionAndSpeaker.TryAdd(n, Variables.As3_IP_Prefix + k);
+                    SendOpenMessageToListener(n);
 
                 }
                 else if (k == 9) //creating connection to the first router of AS1
                 {
-                    GlobalVariables.speakerConAnd_AS.TryAdd((ushort)n, GlobalVariables.AS3);
-                    bgpSpeaker[n].Connect(GlobalVariables.as1_IP_peifix + (k - 9), GlobalVariables.listnerPortNumber, k, k - 9);
-                    GlobalVariables.conAnd_Listner.TryAdd(n, GlobalVariables.as1_IP_peifix + (k - 9));
-                    GlobalVariables.conAnd_Speaker.TryAdd(n, GlobalVariables.as3_IP_Prefix + k);
-                    SendOpenMessageToListner(n);
+                    Variables.SpeakerConnectionAndAS.TryAdd((ushort)n, Variables.AS3);
+                    bgpSpeaker[n].Connect(Variables.As1_IP_Prefix + (k - 9), Variables.ListenerPortNumber, k, k - 9);
+                    Variables.ConnectionAndListener.TryAdd(n, Variables.As1_IP_Prefix + (k - 9));
+                    Variables.ConnectionAndSpeaker.TryAdd(n, Variables.As3_IP_Prefix + k);
+                    SendOpenMessageToListener(n);
                     if ((k - (as2Last + 1)) > 1)//more connections are created to AS3 depending on the size of AS3
                     {
                         n++;
-                        GlobalVariables.speakerConAnd_AS.TryAdd((ushort)n, GlobalVariables.AS3);
-                        bgpSpeaker[n].Connect(GlobalVariables.as3_IP_Prefix + (k - 2), GlobalVariables.listnerPortNumber, k, k - 2);
-                        GlobalVariables.conAnd_Listner.TryAdd(n, GlobalVariables.as3_IP_Prefix + (k - 2));
-                        GlobalVariables.conAnd_Speaker.TryAdd(n, GlobalVariables.as3_IP_Prefix + k);
-                        SendOpenMessageToListner(n);
+                        Variables.SpeakerConnectionAndAS.TryAdd((ushort)n, Variables.AS3);
+                        bgpSpeaker[n].Connect(Variables.As3_IP_Prefix + (k - 2), Variables.ListenerPortNumber, k, k - 2);
+                        Variables.ConnectionAndListener.TryAdd(n, Variables.As3_IP_Prefix + (k - 2));
+                        Variables.ConnectionAndSpeaker.TryAdd(n, Variables.As3_IP_Prefix + k);
+                        SendOpenMessageToListener(n);
                     }
                 }
 
@@ -367,27 +372,26 @@ namespace BGPSimulator.BGP
                 n++;
 
             }
-            
+
 
         }
-        public void SendOpenMessageToListner(int k)
+        public void SendOpenMessageToListener(int k)
         {
-            if (GlobalVariables.True)
-                {
-                
-                    GlobalVariables.conCountSpeaker = k;
+            if (Variables.True)
+            {
+
+                Variables.SpeakerConnectionCount = k;
 
                 //Console.WriteLine("*********** SPEAKER NUMBER**************** : " + k);
 
-                    //OpenMessage(ushort type, ushort version,ushort myAS, ushort holdTime, string bgpIdentifier, ushort optimalParLength)
-                    OpenMessage openPacket = new OpenMessage(GlobalVariables.bgpVerson, GlobalVariables.speakerConAnd_AS[(ushort)k], GlobalVariables.holdTime,
-                        GlobalVariables.conAnd_Speaker[k], GlobalVariables.optimalParLength);
+                //OpenMessage(ushort type, ushort version,ushort myAS, ushort holdTime, string bgpIdentifier, ushort optimalParLength)
+                OpenMessage openPacket = new OpenMessage(Variables.BGPVersion, Variables.SpeakerConnectionAndAS[(ushort)k], Variables.HoldTime,
+                    Variables.ConnectionAndSpeaker[k], Variables.OptimalParameterLength);
 
-                    bgpSpeaker[k].Send(openPacket.BGPmessage);
-               
+                bgpSpeaker[k].Send(openPacket.BGPmessage);
+
             }
         }
     }
-  }
-
+}
 
