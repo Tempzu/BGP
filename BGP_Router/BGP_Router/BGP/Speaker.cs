@@ -1,4 +1,4 @@
-uusing System;
+using System;
 using System.Net;
 using System.Net.Sockets;
 using System.Threading;
@@ -11,7 +11,7 @@ namespace BGP_Router.BGP
     {
 
         public Socket[] tempSocket = new Socket[14];
-        FinateStateMachine FSM_Speaker = new FinateStateMachine();
+        FSM FSM_Speaker = new FSM();
         public bool conectionFlag;
         public int SpeakerID;
         public int ListenerID;
@@ -47,7 +47,7 @@ namespace BGP_Router.BGP
 
                 //Console.WriteLine("IP ADDRESS: port : speaker ID : Listener ID :"+ipAddress +"  " + port + "  " + speaker + "  " + Listener);
 
-                speakerSocket.BeginConnect(new IPEndPoint(IPAddress.Parse(ipAddress), port), ConnectCallback, speakerSocket);
+                mSocketSpeaker.BeginConnect(new IPEndPoint(IPAddress.Parse(ipAddress), port), ConnectCallback, mSocketSpeaker);
 
             }
             catch (Exception e)
@@ -80,8 +80,8 @@ namespace BGP_Router.BGP
                     Variables.CurrentSpeakerCount++;
 
                     Variables.ListenerNumber = ListenerID;
-                    Variables.SpeakerIpAddress = ((IPEndPoint)speakerSocket.LocalEndPoint).Address.ToString();
-                    Variables.ListenerIpAddress = ((IPEndPoint)speakerSocket.RemoteEndPoint).Address.ToString();
+                    Variables.SpeakerIPAddress = ((IPEndPoint)speakerSocket.LocalEndPoint).Address.ToString();
+                    Variables.ListenerIPAddress = ((IPEndPoint)speakerSocket.RemoteEndPoint).Address.ToString();
 
 
 
@@ -90,19 +90,19 @@ namespace BGP_Router.BGP
                     Console.Write("BGP Speaker " + SpeakerID + " : " + IPAddress.Parse(((IPEndPoint)speakerSocket.LocalEndPoint).Address.ToString()) + " Connected to ---->" +
                     "BGP Listener " + ListenerID + " : " + IPAddress.Parse(((IPEndPoint)speakerSocket.RemoteEndPoint).Address.ToString()));
 
-                    FSM_Speaker.TcpConnectionConformed(Variables.True);
+                    FSM_Speaker.TCPConnectionConfirmed(Variables.True);
 
                     completeSpeakerConnection.Set();
 
                     BGPSpeakerState.WaitOne();
                     //connectDone.Set();
-                    Console.WriteLine("BGP Listener : {0}| is in state : {1}", Variables.ListenerIpAddress, Variables.ListenerConnectionStatus);
+                    Console.WriteLine("BGP Listener : {0}| is in state : {1}", Variables.ListenerIPAddress, Variables.ListenerConnectionStatus);
                     BGPSpeakerState.Set();
 
                 }
 
-                buffer = new byte[1024];
-                speakerSocket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, ReceivedCallback, speakerSocket);
+                mBuffer = new byte[1024];
+                speakerSocket.BeginReceive(mBuffer, 0, mBuffer.Length, SocketFlags.None, ReceivedCallback, speakerSocket);
 
             }
             catch (Exception e)
@@ -126,14 +126,14 @@ namespace BGP_Router.BGP
                 int bufferLength = speakerSocket.EndReceive(result);
 
                 byte[] packet = new byte[bufferLength];
-                Array.Copy(buffer, packet, packet.Length);
+                Array.Copy(mBuffer, packet, packet.Length);
                 BGPListenerState.Set();
                 // Signal that all bytes have been received.
                 // Signal that all bytes have been received.
                 //Console.Write("\n"+"BGP Speaker:" + IPAddress.Parse(((IPEndPoint)speakerSocket.LocalEndPoint).Address.ToString()) + " has RECIVED ");
 
                 //Handle packet here
-                PacketHandler.Handle(packet, speakerSocket);
+                BuildPacket.Handle(packet, speakerSocket);
                 //receiveDone.Set();
                 //FSM_Speaker.BGPOpenMsgRecivedSpeaker(Variables.True);
 
@@ -141,22 +141,22 @@ namespace BGP_Router.BGP
                 if (bufferLength == 58)
                 {
                     BGPListenerUpdateMsgState.WaitOne();
-                    Console.WriteLine("BGP Listener : {0}| is in state : {1}", IPAddress.Parse(((IPEndPoint)speakerSocket.RemoteEndPoint).Address.ToString()), Variables.ListenerConnectionState);
+                    Console.WriteLine("BGP Listener : {0}| is in state : {1}", IPAddress.Parse(((IPEndPoint)speakerSocket.RemoteEndPoint).Address.ToString()), Variables.ListenerConnectionStatus);
                     BGPListenerUpdateMsgState.Set();
                 }
                 if (bufferLength == 40)
                 {
 
-                    FSM_Speaker.BGPKeepAliveMsgSend(Variables.True);
+                    FSM_Speaker.BGPKeepAliveMessageSend(Variables.True);
                     BGPListenerOpenMsgState.WaitOne();
-                    Console.WriteLine("BGP Listener : {0}| is in state : {1}", IPAddress.Parse(((IPEndPoint)speakerSocket.RemoteEndPoint).Address.ToString()), Variables.ListenerConnectionState);
+                    Console.WriteLine("BGP Listener : {0}| is in state : {1}", IPAddress.Parse(((IPEndPoint)speakerSocket.RemoteEndPoint).Address.ToString()), Variables.ListenerConnectionStatus);
                     BGPListenerOpenMsgState.Set();
                 }
 
 
 
-                buffer = new byte[1024];
-                speakerSocket.BeginReceive(buffer, 0, buffer.Length, SocketFlags.None, ReceivedCallback, speakerSocket);
+                mBuffer = new byte[1024];
+                speakerSocket.BeginReceive(mBuffer, 0, mBuffer.Length, SocketFlags.None, ReceivedCallback, speakerSocket);
 
             }
             catch (ObjectDisposedException ex)
@@ -194,7 +194,7 @@ namespace BGP_Router.BGP
             {
 
                 // Begin sending the data to the remote device.
-                speakerSocket.BeginSend(data, 0, data.Length, 0, SendCallback, speakerSocket);
+                mSocketSpeaker.BeginSend(data, 0, data.Length, 0, SendCallback, mSocketSpeaker);
                 // Console.WriteLine("*********************** Speaker" + IPAddress.Parse(((IPEndPoint)_speakerSocket.LocalEndPoint).Address.ToString())
                 //   +"*********************** Listener" + IPAddress.Parse(((IPEndPoint)_speakerSocket.RemoteEndPoint).Address.ToString()));
                 //Thread.Sleep(1000);
@@ -224,7 +224,7 @@ namespace BGP_Router.BGP
 
 
                 //sendDone.Set();
-                FSM_Speaker.BGPOpenMsgSent(Variables.True);
+                FSM_Speaker.BGPOpenMessageSent(Variables.True);
                 if (message == "")
                 {
                     BGPSpeakerOpenMsg.WaitOne();
@@ -235,7 +235,7 @@ namespace BGP_Router.BGP
 
                     BGPSpeakerOpenMsgState.WaitOne();
 
-                    Console.WriteLine("BGP Speaker : {0}| is in state : {1}", IPAddress.Parse(((IPEndPoint)speakerSocket.LocalEndPoint).Address.ToString()), Variables.speakerConnectionState);
+                    Console.WriteLine("BGP Speaker : {0}| is in state : {1}", IPAddress.Parse(((IPEndPoint)speakerSocket.LocalEndPoint).Address.ToString()), Variables.SpeakerConnectionStatus);
 
                     BGPSpeakerOpenMsgState.Set();
                 }
