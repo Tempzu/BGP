@@ -6,15 +6,15 @@ using System.Threading.Tasks;
 
 namespace BGP_Router.Messages
 {
-    class KeepaAlive : Structure
+    class KeepAlive : Structure
 
     {
         private ushort mType;
-        public KeepaAlive() : base ((ushort)(40), 19)
+        public KeepAlive() : base((ushort)(40), 19)
         {
             Type = 4;
         }
-        public KeepaAlive(byte[] packet) : base(packet)
+        public KeepAlive(byte[] packet) : base(packet)
         {
 
         }
