@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,8 +9,8 @@ namespace BGP_Router.Messages
     class KeepaAlive : Structure
 
     {
-        private short mType;
-        public KeepaAlive() : base ((short)(40), 19)
+        private ushort mType;
+        public KeepaAlive() : base ((ushort)(40), 19)
         {
             Type = 4;
         }
@@ -18,7 +18,7 @@ namespace BGP_Router.Messages
         {
 
         }
-        public short Type
+        public ushort Type
         {
             get { return mType; }
             set
