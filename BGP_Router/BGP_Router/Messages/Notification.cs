@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,20 +8,20 @@ namespace BGP_Router.Messages
 {
     class Notification : Structure
     {
-        private short mErrorCode;
-        private short mErrorSubCode;
+        private ushort mErrorCode;
+        private ushort mErrorSubCode;
         private string mData;
-        private short mType;
+        private ushort mType;
 
-        public Notification(short errorCode, short errorSubcode, string data) 
-            : base((short)(38 + 2 + 2 + 2 + data.Length), 21)
+        public Notification(ushort errorCode, ushort errorSubcode, string data) 
+            : base((ushort)(38 + 2 + 2 + 2 + data.Length), 21)
         {
             Type = 3;
             ErrorCode = errorCode;
             ErrorSubCode = errorSubcode;
             Data = data;
         }
-        public short Type
+        public ushort Type
         {
             get
             {
@@ -33,7 +33,7 @@ namespace BGP_Router.Messages
                 writeType(value, 38);
             }
         }
-        public short ErrorCode
+        public ushort ErrorCode
         {
             get
             {
@@ -45,7 +45,7 @@ namespace BGP_Router.Messages
                 writeErrorCode(value, 40);
             }
         }
-        public short ErrorSubCode
+        public ushort ErrorSubCode
         {
             get
             {
