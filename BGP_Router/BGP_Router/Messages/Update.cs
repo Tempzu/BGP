@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -9,34 +9,34 @@ namespace BGP_Router.Messages
 {
     class Update : Structure
     {
-        private short mType;
+        private ushort mType;
         private UInt16 mWithdrawnRoutesLength;
         private string mWithdrawnRoutes;
-        private short mIpPrefixLength;
+        private ushort mIpPrefixLength;
         private string mIpPrefix;
-        private short mTotalPathAttributeLength;
+        private ushort mTotalPathAttributeLength;
         private string mAttributePath;
         private UInt64 mAttributeType;
         private UInt32 mAttributeLength;
         private string mAttribute;
         private UInt32 mAttrFlags;
         private ushort mTypeCode;
-        private short mOrigin;
+        private ushort mOrigin;
         private string mAsPath;
-        private short mPathSegmentType;
-        private short mPathSegmentLength;
+        private ushort mPathSegmentType;
+        private ushort mPathSegmentLength;
         private string mPathSegmentValue;
         private IPAddress mNextHop;
         private string mMultiExitDisc;
         private UInt64 mLocalPref;
-        private short mAutomaticAggregate;
+        private ushort mAutomaticAggregate;
         private string mAggregator;
         private string mNetworkLayerreachability;
-        private short mNlrLength;
+        private ushort mNlrLength;
         private string mNlrPrefix;
 
-        public Update(UInt16 withdrawRouteLength, string withdrawalRoute, short ipPrefixLength, string ipPrefix, short totalPathAttributeLength, UInt32 attributeLength, UInt32 attrFlags, short typeCode, string attribute, short pathSegmentType, short pathSegmentLength, string pathSegmentValue, short nlrLength, string nlrPrefix)
-            : base ((short)(38 + 2 + withdrawalRoute.Length + 4 + 2 + ipPrefix.Length + 4 + 4 + 4 + 4 + 4 + attribute.Length + 4 + 4 + pathSegmentValue.Length + 4 + nlrPrefix.Length), 184)
+        public Update(UInt16 withdrawRouteLength, string withdrawalRoute, ushort ipPrefixLength, string ipPrefix, ushort totalPathAttributeLength, UInt32 attributeLength, UInt32 attrFlags, ushort typeCode, string attribute, ushort pathSegmentType, ushort pathSegmentLength, string pathSegmentValue, ushort nlrLength, string nlrPrefix)
+            : base ((ushort)(38 + 2 + withdrawalRoute.Length + 4 + 2 + ipPrefix.Length + 4 + 4 + 4 + 4 + 4 + attribute.Length + 4 + 4 + pathSegmentValue.Length + 4 + nlrPrefix.Length), 184)
         {
             Type = 2;
             WithdrawRouteLength = withdrawRouteLength;
@@ -49,12 +49,12 @@ namespace BGP_Router.Messages
             AttributeLength = attributeLength;
             Attribute = attribute;
             PathSegmentType = pathSegmentType;
-            PpathSegmentLength = pathSegmentLength;
+            PathSegmentLength = pathSegmentLength;
             PathSegmentValue = pathSegmentValue;
             NlrLength = nlrLength;
             NlrPrefix = nlrPrefix;
         }
-        public short Type
+        public ushort Type
         {
             get
             {
@@ -90,7 +90,7 @@ namespace BGP_Router.Messages
                 writeWithdrawalRoutes(value, 42);
             }
         }
-        public short IpPrefixLength
+        public ushort IpPrefixLength
         {
             get
             {
@@ -114,7 +114,7 @@ namespace BGP_Router.Messages
                 writeIpPrefix(value, 53);
             }
         }
-        public short TotalPathAttributeLength
+        public ushort TotalPathAttributeLength
         {
             get
             {
@@ -162,7 +162,7 @@ namespace BGP_Router.Messages
                 writeAttributeFlags(value, 75);
             }
         }
-        public short TypeCode
+        public ushort TypeCode
         {
             get
             {
@@ -175,7 +175,7 @@ namespace BGP_Router.Messages
                 writeCodeType(value, 77);
             }
         }
-        public short PathSegmentType
+        public ushort PathSegmentType
         {
             get
             {
@@ -187,7 +187,7 @@ namespace BGP_Router.Messages
                 writePathSegmentType(value, 79);
             }
         }
-        public short PathSegmentLength
+        public ushort PathSegmentLength
         {
             get
             {
@@ -211,7 +211,7 @@ namespace BGP_Router.Messages
                 writePathSegmentValue(value, 83);
             }
         }
-        public short NlrLength
+        public ushort NlrLength
         {
             get
             {
