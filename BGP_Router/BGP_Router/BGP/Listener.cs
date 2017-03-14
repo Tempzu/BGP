@@ -1,8 +1,8 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
-using BGPSimulator.FSM;
-using BGPSimulator.BGPMessage;
+using BGP_Router.Masiina;
+using BGP_Router.Messages;
 using System.Threading;
 using System.Text;
 using System.Collections.Generic;
@@ -11,8 +11,8 @@ namespace BGP_Router.BGP
 {
     public class Listener : Router
     {
-
-        FinateStateMachine FSM_Listener = new FinateStateMachine();
+        FSM FSM_Listener = new FSM();
+     
 
         public Socket[] TempSocket = new Socket[14];
         public string mMessageType;
@@ -21,12 +21,12 @@ namespace BGP_Router.BGP
         private static AutoResetEvent ReceivedMessage = new AutoResetEvent(true);
         private static AutoResetEvent SendKeepAlive = new AutoResetEvent(true);
         private static AutoResetEvent SendUpdate = new AutoResetEvent(true);
-        private object mListenerSocket; //??
+        //private object mListenerSocket; //??
 
         public void Listen(int backlog)
         {
             // listens for 500 tcp backup connection request
-            mListenerSocket.Listen(backlog); //??
+            mSocketListener.Listen(backlog); //??
         }
         //it is implemented to accept to listen data
         public void Accept()
@@ -43,7 +43,7 @@ namespace BGP_Router.BGP
                 // Begin to accept the client connection
                 // and it asks for two parameter with AsyncCallback and object (AcceptedCallback and null) null is set for object reference parameter
 
-                mListenerSocket.BeginAccept(AcceptedCallback, mListenerSocket); // ??
+                mSocketListener.BeginAccept(AcceptedCallback, mSocketListener); // ??
                 //acceptDone.Set();
                 //acceptDone.WaitOne();
                 // Wait until a connection is made before continuing.
@@ -66,7 +66,7 @@ namespace BGP_Router.BGP
 
                 // Get the socket that handles the client request.
                 Socket ListenerSocket = result.AsyncState as Socket;
-                mListenerSocket = ListenerSocket.EndAccept(result);
+                mSocketListener = ListenerSocket.EndAccept(result);
 
                 //acceptDone.Set();
                 // Create the state object.
@@ -140,11 +140,11 @@ namespace BGP_Router.BGP
 
 
                 //Handle the packet
-                PacketHandler.Handle(mPacket, mListenerSocket);
+                BuildPacket.Handle(mPacket, mSocketListener);
 
                 ReceivedMessage.Set();
 
-                FSM_Listener.BGPOpenMsgRecived(Variables.True);
+                FSM_Listener.BGPOpenMessageReceived(Variables.True);
 
                 //}
                 // else
@@ -174,7 +174,7 @@ namespace BGP_Router.BGP
             {
                 //tempSocket[Variables.openMsgSendCount] = Variables.ListenerSocket_Dictionary[Variables.openMsgSendCount];
                 Socket tempSock = Variables.ListenerSocketDictionary[Variables.SendMsgCount];
-                OpenMessage openPacket = new OpenMessage(Variables.BGPVersion, Variables.SpeakerConnectionAndAS[(ushort)Variables.SendMsgCount], Variables.HoldTime,
+                Open openPacket = new Open(Variables.BGPVersion, Variables.SpeakerConnectionAndAS[(ushort)Variables.SendMsgCount], Variables.HoldTime,
                    "" + IPAddress.Parse(((IPEndPoint)tempSock.LocalEndPoint).Address.ToString()), Variables.OptimalParameterLength);
 
 
@@ -201,8 +201,8 @@ namespace BGP_Router.BGP
 
 
                 //tempSocket[Variables.keepAliveMsgSendCount] = Variables.ListenerSocket_Dictionary[Variables.keepAliveMsgSendCount];
-                Socket tempSock = Variables.ListenerSocket_Dictionary[Variables.keepAliveMsgSendCount];
-                KeepAliveMessage keepAlivePacket = new KeepAliveMessage();
+                Socket tempSock = Variables.ListenerSocketDictionary[Variables.KeepAliveMsgSendCount];
+                KeepAlive keepAlivePacket = new KeepAlive();
                 mMessageType = "KeepAlive";
 
                 //sendKeepAliveMessage.WaitOne();
@@ -233,7 +233,7 @@ namespace BGP_Router.BGP
 
 
                     Socket tempSock = Variables.ListenerSocketDictionary[Variables.KeepAliveExpiredCount];
-                    KeepAliveMessage keepAlivePacket = new KeepAliveMessage();
+                    KeepAlive keepAlivePacket = new KeepAlive();
                     mMessageType = "KeepAlive";
 
                     SendKeepAlive.WaitOne();
@@ -287,7 +287,7 @@ namespace BGP_Router.BGP
                     mMessageType = msg;
                     ListenerSocket.BeginSend(data, 0, data.Length, 0, SendCallback, sendSock);
 
-                    sendUpdateMsg.WaitOne();
+                    SendUpdate.WaitOne();
                     //Console.WriteLine("Listener Send update message to speeker");
                 }
                 else if (msg == "Notify")
@@ -315,7 +315,7 @@ namespace BGP_Router.BGP
 
                 // Complete sending the data to the remote device.
                 int bytesSent = ListenerSocket.EndSend(result);
-                sendUpdateMsg.Set();
+                SendUpdate.Set();
 
 
 
