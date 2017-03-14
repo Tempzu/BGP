@@ -100,7 +100,7 @@ namespace BGP_Router.Masiina
         {
             Variables.PathAttribute.Clear();
             int i = 0;
-            foreach (KeyValuePair<int, Tuple<int, string, int, string, int, int, string, Tuple<string>>> entry in GlobalVariables.Adj_RIB_Out)
+            foreach (KeyValuePair<int, Tuple<int, string, int, string, int, int, string, Tuple<string>>> entry in Variables.Adj_RIB_Out)
             {
                 i++;
                 Tuple<int, string, int, ushort> pathAttribute = new Tuple<int, string, int, ushort>(entry.Value.Item2.Length, entry.Value.Item2, entry.Value.Item6, (ushort)entry.Value.Item6);
@@ -115,7 +115,7 @@ namespace BGP_Router.Masiina
         {
             Variables.NLRI.Clear();
             int i = 0;
-            foreach (KeyValuePair<int, Tuple<int, string, int, string, int, int, string, Tuple<string>>> entry in GlobalVariables.Adj_RIB_Out)
+            foreach (KeyValuePair<int, Tuple<int, string, int, string, int, int, string, Tuple<string>>> entry in Variables.Adj_RIB_Out)
             {
                 i++;
                 Tuple<int, string> nlri = new Tuple<int, string>(entry.Value.Rest.Item1.Length, entry.Value.Rest.Item1);
@@ -127,7 +127,7 @@ namespace BGP_Router.Masiina
         {
             Variables.PathSegment.Clear();
             int i = 0;
-            foreach (KeyValuePair<int, Tuple<int, string, int, string, int, int, string, Tuple<string>>> entry in GlobalVariables.Adj_RIB_Out)
+            foreach (KeyValuePair<int, Tuple<int, string, int, string, int, int, string, Tuple<string>>> entry in Variables.Adj_RIB_Out)
             {
                 i++;
                 Tuple<int, string> pathSegment = new Tuple<int, string>(1, "" + entry.Value.Item3 + "" + entry.Value.Item5);
@@ -188,7 +188,7 @@ namespace BGP_Router.Masiina
                                                 // IPAddress.Parse(((IPEndPoint)listner1.Value.RemoteEndPoint).Address.ToString()));
 
                                                 bgpListner.SendSpeaker(updatePacket.BGPmessage, listner.Value, "Update");
-                                                FSM.BGPUpdateMsgSent(Variables.True);
+                                                fsm.BGPUpdateMessageSent(Variables.True);
                                             }
                                         }
                                         catch (Exception ex)
@@ -209,7 +209,7 @@ namespace BGP_Router.Masiina
                                                 //Console.WriteLine("Speaker IP: {0}| Listner IP: {1}", IPAddress.Parse(((IPEndPoint)speaker.Value.LocalEndPoint).Address.ToString()),
                                                 //  IPAddress.Parse(((IPEndPoint)speaker.Value.RemoteEndPoint).Address.ToString()));
                                                 bgpSpeaker.SendListener(updatePacket.BGPmessage, speaker.Value, "Update");
-                                                FSM.BGPUpdateMsgSent(Variables.True);
+                                                fsm.BGPUpdateMessageSent(Variables.True);
                                             }
 
 
@@ -242,7 +242,7 @@ namespace BGP_Router.Masiina
                                 Variables.Withdrawl_IP_Address = "";
                                 Variables.Withdrawl_Length = 0;
                             }
-                            updatePacket = new UpdateMessage ((UInt16)Variables.Withdrawl_Length, Variables.Withdrawl_IP_Address, (ushort)adj_RIB_Out.Item7.Length,
+                            updatePacket = new Update ((UInt16)Variables.Withdrawl_Length, Variables.Withdrawl_IP_Address, (ushort)adj_RIB_Out.Item7.Length,
                                adj_RIB_Out.Item7, 24, (UInt32)pathAttribute.Item1, (UInt32)pathAttribute.Item3, (ushort)pathAttribute.Item4, pathAttribute.Item2, 1,
                                (ushort)pathSegment.Item1, pathSegment.Item2, (ushort)nlri.Item1, nlri.Item2);
                             foreach (KeyValuePair<int, Tuple<string, ushort, string, ushort>> speakerListner in Variables.ConnectionSpeakerAs_ListenerAs)
@@ -260,7 +260,7 @@ namespace BGP_Router.Masiina
                                             // IPAddress.Parse(((IPEndPoint)listner.Value.RemoteEndPoint).Address.ToString()));
 
                                             bgpListner.SendSpeaker(updatePacket.BGPmessage, listner.Value, "Update");
-                                            FSM.BGPUpdateMsgSent(Variables.True);
+                                            fsm.BGPUpdateMessageSent(Variables.True);
                                         }
 
                                     }
@@ -290,7 +290,7 @@ namespace BGP_Router.Masiina
                                                 if (count < 2)
                                                 {
                                                     bgpSpeaker.SendListener(updatePacket.BGPmessage, speaker.Value, "Update");
-                                                    FSM.BGPUpdateMsgSent(Variables.True);
+                                                    fsm.BGPUpdateMessageSent(Variables.True);
                                                 }
 
                                             }
@@ -322,7 +322,7 @@ namespace BGP_Router.Masiina
                                 Variables.Withdrawl_Length = 0;
                             }
 
-                            updatePacket = new UpdateMessage((UInt16)Variables.Withdrawl_Length, Variables.Withdrawl_IP_Address, (ushort)adj_RIB_Out.Item7.Length,
+                            updatePacket = new Update((UInt16)Variables.Withdrawl_Length, Variables.Withdrawl_IP_Address, (ushort)adj_RIB_Out.Item7.Length,
                            adj_RIB_Out.Item7, 24, (UInt32)pathAttribute.Item1, (UInt32)pathAttribute.Item3, (ushort)pathAttribute.Item4, pathAttribute.Item2, 1,
                            (ushort)pathSegment.Item1, pathSegment.Item2, (ushort)nlri.Item1, nlri.Item2);
                             foreach (KeyValuePair<int, Tuple<string, ushort, string, ushort>> speakerListner in Variables.ConnectionSpeakerAs_ListenerAs)
@@ -340,7 +340,7 @@ namespace BGP_Router.Masiina
                                             //   IPAddress.Parse(((IPEndPoint)listner.Value.RemoteEndPoint).Address.ToString()));
                                             //BGPListner bgpListner = new BGPListner();
                                             bgpListner.SendSpeaker(updatePacket.BGPmessage, listner.Value, "Update");
-                                            FSM.BGPUpdateMsgSent(Variables.True);
+                                            fsm.BGPUpdateMessageSent(Variables.True);
 
                                         }
                                     }
@@ -364,7 +364,7 @@ namespace BGP_Router.Masiina
                                             // if (!speakerListner.Value.Item3.Equals("127.2.0.4"))
                                             // {
                                             bgpSpeaker.SendListener(updatePacket.BGPmessage, speaker.Value, "Update");
-                                            FSM.BGPUpdateMsgSent(Variables.True);
+                                            fsm.BGPUpdateMessageSent(Variables.True);
 
                                             // }    
                                         }
@@ -398,7 +398,7 @@ namespace BGP_Router.Masiina
                                 Variables.Withdrawl_Length = 0;
                             }
 
-                            updatePacket = new UpdateMessage((UInt16)Variables.Withdrawl_Length, Variables.Withdrawl_IP_Address, (ushort)adj_RIB_Out.Item7.Length,
+                            updatePacket = new Update((UInt16)Variables.Withdrawl_Length, Variables.Withdrawl_IP_Address, (ushort)adj_RIB_Out.Item7.Length,
                            adj_RIB_Out.Item7, 24, (UInt32)pathAttribute.Item1, (UInt32)pathAttribute.Item3, (ushort)pathAttribute.Item4, pathAttribute.Item2, 1,
                            (ushort)pathSegment.Item1, pathSegment.Item2, (ushort)nlri.Item1, nlri.Item2);
                             foreach (KeyValuePair<int, Tuple<string, ushort, string, ushort>> speakerListner in Variables.ConnectionSpeakerAs_ListenerAs)
@@ -415,7 +415,7 @@ namespace BGP_Router.Masiina
                                             // IPAddress.Parse(((IPEndPoint)listner.Value.RemoteEndPoint).Address.ToString()));
 
                                             bgpListner.SendSpeaker(updatePacket.BGPmessage, listner.Value, "Update");
-                                            FSM.BGPUpdateMsgSent(Variables.True);
+                                            fsm.BGPUpdateMessageSent(Variables.True);
                                         }
 
                                     }
@@ -434,7 +434,7 @@ namespace BGP_Router.Masiina
                                             // IPAddress.Parse(((IPEndPoint)speaker.Value.RemoteEndPoint).Address.ToString()));
 
                                             bgpSpeaker.SendListener(updatePacket.BGPmessage, speaker.Value, "Update");
-                                            FSM.BGPUpdateMsgSent(Variables.True);
+                                            fsm.BGPUpdateMessageSent(Variables.True);
                                         }
                                     }
                                 }
@@ -496,7 +496,7 @@ namespace BGP_Router.Masiina
                                 // IPAddress.Parse(((IPEndPoint)listner1.Value.RemoteEndPoint).Address.ToString()));
 
                                 bgpListner.SendSpeaker(notifyPacket.BGPmessage, listner.Value, "Notify");
-                                FSM.BGPNotifyMsgSent(Variables.True);
+                                fsm.BGPNotifyMessageSent(Variables.True);
                             }
                         }
                         catch (Exception ex)
@@ -517,7 +517,7 @@ namespace BGP_Router.Masiina
                                 //Console.WriteLine("Speaker IP: {0}| Listner IP: {1}", IPAddress.Parse(((IPEndPoint)speaker.Value.LocalEndPoint).Address.ToString()),
                                 //  IPAddress.Parse(((IPEndPoint)speaker.Value.RemoteEndPoint).Address.ToString()));
                                 bgpSpeaker.SendListener(notifyPacket.BGPmessage, speaker.Value, "Notify");
-                                FSM.BGPNotifyMsgSent(Variables.True);
+                                fsm.BGPNotifyMessageSent(Variables.True);
                             }
 
 
@@ -535,3 +535,4 @@ namespace BGP_Router.Masiina
 
     }
 }
+
