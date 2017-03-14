@@ -140,7 +140,7 @@ namespace BGP_Router.Masiina
         private static AutoResetEvent ConnectionType = new AutoResetEvent(true);
 
 
-        InitializingListenersSpeakers Initialize_BGP = new InitializingListenersSpeakers();
+        InitilizeBGPListenerSpeaker Initialize_BGP = new InitilizeBGPListenerSpeaker();
 
         //public string Status[Initialize_BGP.connCount];
         //StatusMachine SM = new StatusMachine();
@@ -259,7 +259,7 @@ namespace BGP_Router.Masiina
 
                 ConnectionType.WaitOne();
 
-                if (Variables.SpeakerAS[Variables.SpeakerIPAddress] == Variables.ListenerAS[Variables.ListenerIPAddress])
+                if (Variables.SpeakerAS[Variables.SpeakerIpAddress] == Variables.ListenerAS[Variables.ListenerIpAddress])
                 {
                     Variables.ConnectionStatus = "Internal Connection";
                     Console.WriteLine("!! With :" + Variables.ConnectionStatus);
