@@ -8,15 +8,15 @@ namespace BGP_Router.Messages
 {
     class Open : Structure
     {
-        private short mType;
-        private short mVersion;
-        private short mAS;
-        private short mHoldTime;
+        private ushort mType;
+        private ushort mVersion;
+        private ushort mAS;
+        private ushort mHoldTime;
         private string mBgpIdentifier;
-        private short mOptimalParLength;
+        private ushort mOptimalParLength;
 
-        public Open(short version, short AS, short holdTime, string bgpIdentifier, short optimalParLength)
-            : base ((short)(38 + 2 + 2 + 4 + bgpIdentifier.Length + 1 + 2), 40)
+        public Open(ushort version, ushort AS, ushort holdTime, string bgpIdentifier, ushort optimalParLength)
+            : base ((ushort)(38 + 2 + 2 + 4 + bgpIdentifier.Length + 1 + 2), 40)
         {
             Type = 1;
             Version = version;
@@ -26,7 +26,7 @@ namespace BGP_Router.Messages
             OptimalParLength = optimalParLength;
         }
 
-        public short Type
+        public ushort Type
         {
             get
             {
@@ -38,7 +38,7 @@ namespace BGP_Router.Messages
                 writeType(value, 38);
             }
         }
-        public short Version
+        public ushort Version
         {
             get
             {
@@ -50,7 +50,7 @@ namespace BGP_Router.Messages
                 writeVersion(value, 42);
             }
         }
-        public short AS1
+        public ushort AS1
         {
             get
             {
@@ -62,7 +62,7 @@ namespace BGP_Router.Messages
                 writeAS(value, 42);
             }
         }
-        public short HoldTime
+        public ushort HoldTime
         {
             get
             {
@@ -86,7 +86,7 @@ namespace BGP_Router.Messages
                 writeBGPID(value, 46);
             }
         }
-        public short OptimalParLength
+        public ushort OptimalParLength
         {
             get
             {
