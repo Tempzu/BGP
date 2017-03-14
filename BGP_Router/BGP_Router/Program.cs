@@ -31,10 +31,7 @@ namespace BGPSimulator
 
             while (true)
             {
-                Console.WriteLine("Type 'update' to enforce local policy. This must be done in order to see routing tables.");
-                Console.WriteLine("Type 'as1', 'as2' or 'as3' to see routing tables");
-                Console.WriteLine("Type 'remove' to close a router");
-                Console.WriteLine("Type 'help' for commands");
+
                 string line = Console.ReadLine(); // User can update, look routing tables and remove routers with commands
 
                 switch (line)
