@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,8 +9,8 @@ namespace BGP_Router.Messages
     public abstract class Structure
     {
         private byte[] mBuffer;
-        public long marker;
-        public Structure(long marker, int length)
+        public ulong marker;
+        public Structure(ulong marker, int length)
         {
             mBuffer = new byte[marker];
             for (int i = 0; i < 16; i++)
@@ -19,7 +19,7 @@ namespace BGP_Router.Messages
             }
             writeLength(length, 32);
         }
-        public void writeMarker(long value, int offset)
+        public void writeMarker(ulong value, int offset)
         {
             byte[] temp = new byte[32];
 
@@ -33,26 +33,26 @@ namespace BGP_Router.Messages
             Buffer.BlockCopy(temp, 0, mBuffer, offset, 2);
         }
         // assign message value
-        public void writeType(short value, int offset)
+        public void writeType(ushort value, int offset)
         {
             byte[] temp = new byte[2];
             temp = BitConverter.GetBytes(value);
             Buffer.BlockCopy(temp, 0, mBuffer, offset, 2);
         }
         // Here begins the OpenMessage implementation
-        public void writeVersion(short value, int offset)
+        public void writeVersion(ushort value, int offset)
         {
             byte[] temp = new byte[2];
             temp = BitConverter.GetBytes(value);
             Buffer.BlockCopy(temp, 0, mBuffer, offset, 2);
         }
-        public void writeAS(short value, int offset)
+        public void writeAS(ushort value, int offset)
         {
             byte[] temp = new byte[2];
             temp = BitConverter.GetBytes(value);
             Buffer.BlockCopy(temp, 0, mBuffer, offset, 2);
         }
-        public void writeHoldTime(short value, int offset)
+        public void writeHoldTime(ushort value, int offset)
         {
             byte[] temp = new byte[2];
             temp = BitConverter.GetBytes(value);
@@ -64,7 +64,7 @@ namespace BGP_Router.Messages
             temp = Encoding.UTF8.GetBytes(value);
             Buffer.BlockCopy(temp, 0, mBuffer, offset, value.Length);
         }
-        public void writeOptimalLength(short value, int offset)
+        public void writeOptimalLength(ushort value, int offset)
         {
             byte[] temp = new byte[2];
             temp = BitConverter.GetBytes(value);
@@ -89,7 +89,7 @@ namespace BGP_Router.Messages
             temp = Encoding.UTF8.GetBytes(value);
             Buffer.BlockCopy(temp, 0, mBuffer, offset, value.Length);
         }
-        public void writeIpPrefixLength(short value, int offset)
+        public void writeIpPrefixLength(ushort value, int offset)
         {
             byte[] temp = new byte[2];
             temp = BitConverter.GetBytes(value);
@@ -101,7 +101,7 @@ namespace BGP_Router.Messages
             temp = Encoding.UTF8.GetBytes(value);
             Buffer.BlockCopy(temp, 0, mBuffer, offset, value.Length);
         }
-        public void writeTotalPath(short value, int offset)
+        public void writeTotalPath(ushort value, int offset)
         {
             byte[] temp = new byte[4];
             temp = BitConverter.GetBytes(value);
@@ -125,19 +125,19 @@ namespace BGP_Router.Messages
             temp = BitConverter.GetBytes(value);
             Buffer.BlockCopy(temp, 0, mBuffer, offset, 2);
         }
-        public void writeCodeType(short value, int offset)
+        public void writeCodeType(ushort value, int offset)
         {
             byte[] temp = new byte[2];
             temp = BitConverter.GetBytes(value);
             Buffer.BlockCopy(temp, 0, mBuffer, offset, 2);
         }
-        public void writePathSegmentType(short value, int offset)
+        public void writePathSegmentType(ushort value, int offset)
         {
             byte[] temp = new byte[2];
             temp = BitConverter.GetBytes(value);
             Buffer.BlockCopy(temp, 0, mBuffer, offset, 2);
         }
-        public void writePathSegmentLength(short value, int offset)
+        public void writePathSegmentLength(ushort value, int offset)
         {
             byte[] temp = new byte[2];
             temp = BitConverter.GetBytes(value);
@@ -149,7 +149,7 @@ namespace BGP_Router.Messages
             temp = Encoding.UTF8.GetBytes(value);
             Buffer.BlockCopy(temp, 0, mBuffer, offset, value.Length);
         }
-        public void writeNlrLength(short value, int offset)
+        public void writeNlrLength(ushort value, int offset)
         {
             byte[] temp = new byte[2];
             temp = BitConverter.GetBytes(value);
@@ -162,13 +162,13 @@ namespace BGP_Router.Messages
             Buffer.BlockCopy(temp, 0, mBuffer, offset, value.Length);
         }
         // Notification message here
-        public void writeErrorCode(short value, int offset)
+        public void writeErrorCode(ushort value, int offset)
         {
             byte[] temp = new byte[2];
             temp = BitConverter.GetBytes(value);
             Buffer.BlockCopy(temp, 0, mBuffer, offset, 2);
         }
-        public void writeErrorSubCode(short value, int offset)
+        public void writeErrorSubCode(ushort value, int offset)
         {
             byte[] temp = new byte[2];
             temp = BitConverter.GetBytes(value);
