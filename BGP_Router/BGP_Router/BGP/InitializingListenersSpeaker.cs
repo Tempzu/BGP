@@ -14,9 +14,9 @@ namespace BGP_Router.BGP
 
         private static AutoResetEvent speakerConnectionRequest = new AutoResetEvent(true);
 
-        //to create 13 speaker for 10 routers
+        //to help in the creation of speakers
         int m = 0;
-        //to create 14 different connection
+        //to help in the creation of connections
         int n = 0;
         public ushort AS;
 
@@ -90,7 +90,13 @@ namespace BGP_Router.BGP
                 as2Last = as2First;
                 as3First = 9;
             }
-
+            
+            Console.WriteLine("Connections will be now created. Below you can see commands.");
+            Console.WriteLine("Type 'update' to enforce local policy. This must be done in order to see routing tables.");
+            Console.WriteLine("Type 'as1', 'as2' or 'as3' to see routing tables.");
+            Console.WriteLine("Type 'remove' to close a router.");
+            Console.WriteLine("Type 'help' for commands.");
+            Thread.Sleep(3000);
 
             for (int i = 0; i < 10; i++)
             {
