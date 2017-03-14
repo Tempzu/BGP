@@ -27,7 +27,7 @@ namespace BGP_Router.BGP
         public static string As3_IP_Prefix = "127.3.0.";
         //public static ushort autonomousSystemSpeaker;
         //public static ushort autonomousSystemListner;
-        public static ushort AacketAS;
+        public static ushort PacketAS;
         public static int ListenerConnectionCount;
         public static int SpeakerConnectionCount;
         public static int CurrentSpeakerCount;
@@ -45,9 +45,9 @@ namespace BGP_Router.BGP
         public static ushort BGPVersion = 4;
         public static ushort HoldTime = 4;
         public static ushort OptimalParameterLength = 0;
-        //implement ip
-        public static string SpeakerIpAddress;
-        public static string ListenerIpAddress;
+        //implement IP
+        public static string SpeakerIPAddress;
+        public static string ListenerIPAddress;
 
         //connectCount and Listner
         //ConcurrentDictionary is used for the thread safety
