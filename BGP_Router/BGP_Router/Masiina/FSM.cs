@@ -259,7 +259,7 @@ namespace BGP_Router.Masiina
 
                 ConnectionType.WaitOne();
 
-                if (Variables.SpeakerAS[Variables.SpeakerIpAddress] == Variables.ListenerAS[Variables.ListenerIpAddress])
+                if (Variables.SpeakerAS[Variables.SpeakerIPAddress] == Variables.ListenerAS[Variables.ListenerIPAddress])
                 {
                     Variables.ConnectionStatus = "Internal Connection";
                     Console.WriteLine("!! With :" + Variables.ConnectionStatus);
