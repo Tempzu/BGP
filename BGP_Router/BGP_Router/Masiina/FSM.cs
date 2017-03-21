@@ -140,7 +140,7 @@ namespace BGP_Router.Masiina
         private static AutoResetEvent ConnectionType = new AutoResetEvent(true);
 
 
-        InitilizeBGPListenerSpeaker Initialize_BGP = new InitilizeBGPListenerSpeaker();
+        InitilizingListenerSpeaker Initialize_BGP = new InitilizingListenerSpeaker();
 
         //public string Status[Initialize_BGP.connCount];
         //StatusMachine SM = new StatusMachine();
