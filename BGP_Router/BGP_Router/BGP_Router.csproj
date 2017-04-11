@@ -54,7 +54,7 @@
     <Compile Include="Masiina\FSM.cs" />
     <Compile Include="Masiina\States.cs" />
     <Compile Include="Masiina\UpdateMessage.cs" />
-    <Compile Include="Messages\KeepaAlive.cs" />
+    <Compile Include="Messages\KeepAlive.cs" />
     <Compile Include="Messages\Notification.cs" />
     <Compile Include="Messages\Open.cs" />
     <Compile Include="Messages\Structure.cs" />
