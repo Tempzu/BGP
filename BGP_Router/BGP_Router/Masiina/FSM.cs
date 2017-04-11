@@ -10,114 +10,10 @@ using BGP_Router.Messages;
 using BGP_Router.BGP;
 using BGP_Router.Masiina;
 using System.Net;
-/**
-    8.2.  DescrIPtion of FSM
-        8.2.1.  FSM Definition 
-            BGP MUST maintain a separate FSM for each configured peer.  Each BGP peer paired in a potential Connection will attempt to Connect to the
-        other, unless configured to remain in the idle Status, or configured to remain passive.  For the purpose of this discussion, the active or
-        Connecting side of the TCP Connection (the side of a TCP Connection sending the first TCP SYN packet) is called outgoing.  The passive or
-        listening side (the sender of the first SYN/ACK) is called an incoming Connection.  (See Section 8.2.1.1 for information on the terms active and passive used below.)
-            A BGP implementation MUST Connect to and listen on TCP port 179 for incoming Connections in addition to trying to Connect to peers.  For
-        each incoming Connection, a Status machine MUST be instantiated. There exists a period in which the identity of the peer on the other
-        end of an incoming Connection is known, but the BGP identifier is not known.  During this time, both an incoming and outgoing Connection
-        may exist for the same configured peering.  This is refErrored to as a Connection collision (see Section 6.8).
-            A BGP implementation will have, at most, one FSM for each configured peering, plus one FSM for each incoming TCP Connection for which the
-        peer has not yet been identified.  Each FSM corresponds to exactly one TCP Connection.
-             There may be more than one Connection between a pair of peers if the Connections are configured to use a different pair of IP addresses.
-        This is refErrored to as multIPle "configured peerings" to the same peer.
-    8.2.1.1.  Terms "active" and "passive"
-             The words active and passive have slightly different meanings when applied to a TCP Connection or a peer.  There is only one active side and one
-        passive side to any one TCP Connection, per the definition above and the Status machine below.  When a BGP speaker is configured as active,
-        it may end up on either the active or passive side of the Connection that eventually gets established.  Once the TCP Connection is
-        completed, it doesn't matter which end was active and which was passive.  The only difference is in which side of the TCP Connection has port number 179.
-   8.2.1.2.  FSM and Collision Detection
-            There is one FSM per BGP Connection.  When the Connection collision occurs prior to determining what peer a Connection is associated
-        with, there may be two Connections for one peer.  After the Connection collision is resolved (see Section 6.8), the FSM for the
-        Connection that is closed SHOULD be disposed.
-  8.2.1.3.  FSM and Optional Session Attributes
-            Optional Session Attributes specify either attributes that act as flags (TRUE or FALSE) or optional timers.  For optional attributes
-        that act as flags, if the optional session attribute can be set to TRUE on the system, the corresponding BGP FSM actions must be
-        supported.  For example, if the following options can be set in a BGP implementation: AutoStart and PassiveTCPEstablishment, then Events 3,
-        4 and 5 must be supported.  If an Optional Session attribute cannot be set to TRUE, the events supporting that set of options do not have to be supported.
-     Each of the optional timers (DelayOpenTimer and IdleHoldTimer) has a group of attributes that are:
-            - flag indicating support, - Time set in Timer - Timer.
-     The two optional timers show this format:
-            DelayOpenTimer: DelayOpen, DelayOpenTime, DelayOpenTimer
-            IdleHoldTimer:  DampPeerOscillations, IdleHoldTime, IdleHoldTimer
-   8.2.1.4.  FSM Event Numbers
-            The Event numbers (1-28) utilized in this Status machine descrIPtion aid in specifying the behavior of the BGP Status machine.
-        Implementations MAY use these numbers to provide network management information.  The exact form of an FSM or the FSM events are specific to each implementation.
-   8.2.1.5.  FSM Actions that are Implementation Dependent
-        At certain points, the BGP FSM specifies that BGP initialization will occur or that BGP resources will be deleted.  The initialization of
-    the BGP FSM and the associated resources depend on the policy portion of the BGP implementation.  The details of these actions are outside the scope of the FSM document.
- ********* Actual implementation Part************
-    Idle Status[Initialize_BGP.connCount]:
-    Connect Status[Initialize_BGP.connCount]:
-  
-   Active Status[Initialize_BGP.connCount]:
-            
-            If the DelayOpen attribute is set to FALSE, the local system:
-                    - sets the ConnectRetryTimer to zero,
-                    - completes the BGP initialization,
-                    - sends the OPEN message to its peer,
-                    - sets its HoldTimer to a large value, and
-                    - changes its Status to OpenSent.
-            
-            
-    OpenSent:
-            
-      OpenConfirm Status[Initialize_BGP.connCount]:
-            In this Status, BGP waits for a KeepAlive or NOTIFICATION message.
-            Any start event (Events 1, 3-7) is ignored in the OpenConfirm Status.
-           
-            If a TCP Connection is attempted with an invalid port (Event 15), the local system will ignore the second Connection attempt.
-            If the local system receives a valid OPEN message (BGPOpen (Event 19)), the collision detect function is processed per Section 6.8.
-            If this Connection is to be dropped due to Connection collision, the local system:
-                    - sends a NOTIFICATION with a Cease,
-                    - sets the ConnectRetryTimer to zero,
-                    - releases all BGP resources,
-                    - drops the TCP Connection (send TCP FIN),
-                    - increments the ConnectRetryCounter by 1,
-                    - (optionally) performs peer oscillation damping if the DampPeerOscillations attribute is set to TRUE, and
-                    - changes its Status to Idle.
-           
-            
-    Established Status[Initialize_BGP.connCount]:
-           
-            Each time the local system sends a KeepAlive or UPDATE message, it restarts its KeepAliveTimer, unless the negotiated HoldTime value is zero.
-            A TCPConnection_Valid (Event 14), received for a valid port, will cause the second Connection to be tracked.
-            In response to an indication that the TCP Connection is successfully established (Event 16 or Event 17), the second Connection SHALL be tracked 
-            until it sends an OPEN message.
-            
-**/
+
 
 namespace BGP_Router.Masiina
 {
-    /**
-     8.2.2.  Finite Status[Initialize_BGP.connCount] Machine
-        Idle Status:
-            Initially, the BGP peer FSM is in the Idle Status.Hereafter, the BGP peer FSM will be shortened to BGP FSM.In this Status, BGP FSM refuses all incoming BGP Connections for
-        this peer.No resources are allocated to the peer.
-      
-        
-        In response to AutomaticStart_with_PassiveTCPEstablishment event (Event 5), the local system:
-                    - initializes all BGP resources,
-                    - sets the ConnectRetryCounter to zero,
-                    - starts the ConnectRetryTimer with the initial value,
-                    - listens for a Connection that may be initiated by the remote peer, and
-                    - changes its Status to Active.
-       
-            
-       Connect Status[Initialize_BGP.connCount]:
-            
-            If the DelayOpen attribute is set to FALSE, the local system:
-                    - stops the ConnectRetryTimer (if running) and sets the ConnectRetryTimer to zero,
-                    - completes BGP initialization
-                    - sends an OPEN message to its peer,
-                    - sets the HoldTimer to a large value, and
-                    - changes its Status to OpenSent.
-           
-    **/
     public class FSM : States
     {
         bool AutoStartEvent;
@@ -140,7 +36,7 @@ namespace BGP_Router.Masiina
         private static AutoResetEvent ConnectionType = new AutoResetEvent(true);
 
 
-        InitilizingListenerSpeaker Initialize_BGP = new InitilizingListenerSpeaker();
+        InitializingListenerSpeaker Initialize_BGP = new InitializingListenerSpeaker();
 
         //public string Status[Initialize_BGP.connCount];
         //StatusMachine SM = new StatusMachine();
