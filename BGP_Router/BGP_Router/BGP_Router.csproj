@@ -44,7 +44,16 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BGP\Router.cs" />
-    <Compile Include="Masiina\Class1.cs" />
+    <Compile Include="BGP\BuildPacket.cs" />
+    <Compile Include="BGP\InitializingListenersSpeaker.cs" />
+    <Compile Include="BGP\Listener.cs" />
+    <Compile Include="BGP\RouterClose.cs" />
+    <Compile Include="BGP\Routing_table.cs" />
+    <Compile Include="BGP\Speaker.cs" />
+    <Compile Include="BGP\Variables.cs" />
+    <Compile Include="Masiina\FSM.cs" />
+    <Compile Include="Masiina\States.cs" />
+    <Compile Include="Masiina\UpdateMessage.cs" />
     <Compile Include="Messages\KeepaAlive.cs" />
     <Compile Include="Messages\Notification.cs" />
     <Compile Include="Messages\Open.cs" />
