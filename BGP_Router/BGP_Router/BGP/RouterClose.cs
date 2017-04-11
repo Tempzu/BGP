@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using BGPSimulator.FSM;
+using BGP_outer.Masiina;
 
 namespace BGP_Router.BGP
 {
@@ -14,7 +14,7 @@ namespace BGP_Router.BGP
     {
         private Dictionary<int, Socket> ListenerSocket_DictionaryCopy = new Dictionary<int, Socket>();
         private Dictionary<int, Socket> SpeakerSocket_DictionaryCopy = new Dictionary<int, Socket>();
-        UpdateMessageHandling UpdateHandler = new UpdateMessageHandling();
+        UpdateMessage UpdateHandler = new UpdateMessage();
         ushort value;
         string stringValue;
         Socket socket;
