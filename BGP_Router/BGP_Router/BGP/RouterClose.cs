@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using BGP_outer.Masiina;
+using BGP_Router.Masiina;
 
 namespace BGP_Router.BGP
 {
