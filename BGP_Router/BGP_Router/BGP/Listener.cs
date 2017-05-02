@@ -12,7 +12,7 @@ namespace BGP_Router.BGP
     public class Listener : Router
     {
         FSM FSM_Listener = new FSM();
-     
+
 
         public Socket[] TempSocket = new Socket[14];
         public string mMessageType;
@@ -66,7 +66,7 @@ namespace BGP_Router.BGP
 
                 // Get the socket that handles the client request.
                 Socket ListenerSocket = result.AsyncState as Socket;
-                mSocketListener = ListenerSocket.EndAccept(result);
+                ListenerSocket = ListenerSocket.EndAccept(result);
 
                 //acceptDone.Set();
                 // Create the state object.
@@ -140,7 +140,7 @@ namespace BGP_Router.BGP
 
 
                 //Handle the packet
-                BuildPacket.Handle(mPacket, mSocketListener);
+                BuildPacket.Handle(mPacket, ListenerSocket);
 
                 ReceivedMessage.Set();
 
