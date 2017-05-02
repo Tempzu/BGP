@@ -36,7 +36,7 @@ namespace BGP_Router.Masiina
         private static AutoResetEvent ConnectionType = new AutoResetEvent(true);
 
 
-        InitializeBGPListenersSpeaker Initialize_BGP = new InitializeBGPListenersSpeaker();
+        InitializingListenersSpeakers Initialize_BGP = new InitializingListenersSpeakers();
         
         public void IdleStatus()
         {
