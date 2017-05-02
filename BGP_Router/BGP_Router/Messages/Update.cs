@@ -9,29 +9,22 @@ namespace BGP_Router.Messages
 {
     class Update : Structure
     {
+        /* Consists of withdrawn routes length (2-octets) + withdrawn routes(variable/IPLength+IPPrefix) + total path attribute length (2-octets) 
+         * + path attributes (variable/ attribute flags + attribute type code) + network layer reachability information (variable/ length + prefix)
+         * */
         private ushort mType;
         private UInt16 mWithdrawnRoutesLength;
         private string mWithdrawnRoutes;
         private ushort mIpPrefixLength;
         private string mIpPrefix;
         private ushort mTotalPathAttributeLength;
-        //private string mAttributePath;
-       // private UInt64 mAttributeType;
         private UInt32 mAttributeLength;
         private string mAttribute;
         private UInt32 mAttrFlags;
         private ushort mTypeCode;
-        //private ushort mOrigin;
-        //private string mAsPath;
         private ushort mPathSegmentType;
         private ushort mPathSegmentLength;
         private string mPathSegmentValue;
-       // private IPAddress mNextHop;
-       // private string mMultiExitDisc;
-        //private UInt64 mLocalPref;
-        //private ushort mAutomaticAggregate;
-       // private string mAggregator;
-       // private string mNetworkLayerreachability;
         private ushort mNlrLength;
         private string mNlrPrefix;
 
@@ -54,6 +47,7 @@ namespace BGP_Router.Messages
             NlrLength = nlrLength;
             NlrPrefix = nlrPrefix;
         }
+        // Setting the corresponding places
         public ushort Type
         {
             get
