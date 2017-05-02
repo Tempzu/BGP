@@ -8,14 +8,20 @@ namespace BGP_Router.Messages
 {
     class Open : Structure
     {
+        /* Consists of version(1-octet) + my AS(2-octet) + hold time(2-octet) + BGP identifier(4-octet)
+        *  + optional parameters length(1-octet) + optional parameters(8-octet)
+        *  Minimum length of OPEN message is 29 octets(includes header).
+        */
+        //Open message type
         private ushort mType;
+        //Open message version/BGP version
         private ushort mVersion;
         private ushort mAS;
         private ushort mHoldTime;
         private string mBgpIdentifier;
-        private ushort mOptimalParLength;
+        private ushort mOptionalParLength;
 
-        public Open(ushort version, ushort AS, ushort holdTime, string bgpIdentifier, ushort optimalParLength)
+        public Open(ushort version, ushort AS, ushort holdTime, string bgpIdentifier, ushort optionalParLength)
             : base ((ushort)(38 + 2 + 2 + 4 + bgpIdentifier.Length + 1 + 2), 40)
         {
             Type = 1;
@@ -23,9 +29,10 @@ namespace BGP_Router.Messages
             AS1 = AS;
             HoldTime = holdTime;
             BgpIdentifier = bgpIdentifier;
-            OptimalParLength = optimalParLength;
+            OptionalParLength = optionalParLength;
         }
 
+        // Setting the field to corresponding places
         public ushort Type
         {
             get
@@ -86,16 +93,16 @@ namespace BGP_Router.Messages
                 writeBGPID(value, 46);
             }
         }
-        public ushort OptimalParLength
+        public ushort OptionalParLength
         {
             get
             {
-                return mOptimalParLength;
+                return mOptionalParLength;
             }
             set
             {
-                mOptimalParLength = value;
-                writeOptimalLength(value, 55);
+                mOptionalParLength = value;
+                writeOptionalLength(value, 55);
             }
         }
     }
