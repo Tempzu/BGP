@@ -75,8 +75,8 @@ namespace BGP_Router.BGP
                 }
                 catch
                 {
-                    Console.WriteLine("The character you typed wasn't a number, so we set 4 routers to AS2.");
-                    as2Last = as1Last + 4; ;
+                    Console.WriteLine("The character you typed wasn't a number, so we set " + (8 - Variables.as1Last) + " routers to AS2.");
+                    Variables.as2Last = Variables.as1Last + (8 - Variables.as1Last);
                 }
                 as3First = as2Last + 1;
             }
