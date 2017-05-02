@@ -10,7 +10,9 @@ namespace BGP_Router.Masiina
 
     public class States
     {
-        
+        // Supportive class for FSM
+        // Getters and Setters for events used in FSM
+
         public int ConnectRetryCounter;
         public Timer mConnectRetryTimer;
         public DateTime ConnectRetryTime;
@@ -19,9 +21,7 @@ namespace BGP_Router.Masiina
         public Timer mKeepAliveTimer;
         public DateTime KeepAliveTime;
 
-       
         public event EventHandler OnAutomaticStartEvent;
-        
         public event EventHandler OnAutomaticStopEvent;
 
         bool automaticStart;
@@ -46,7 +46,8 @@ namespace BGP_Router.Masiina
             }
 
         }
-     
+       
+
         public event EventHandler ConnectRetryTimer_Expire;
         public event EventHandler HoldTimer_Expire;
         public event EventHandler KeepaliveTimer_Expire;
@@ -88,7 +89,7 @@ namespace BGP_Router.Masiina
         public event EventHandler TCPConnectionFails_Event;
 
         public bool mTCPConnectionAcknowledged;
-        public bool sTCPConnectionAcknowledged
+        public bool TCPConnectionAcknowledged
         {
             get { return mTCPConnectionAcknowledged; }
             set
@@ -99,7 +100,7 @@ namespace BGP_Router.Masiina
         }
 
         public bool mTCPConnectionConfirmedValue;
-        public bool sTCPConnectionConfirmedValue
+        public bool TCPConnectionConfirmedValue
         {
             get { return mTCPConnectionConfirmedValue; }
             set
@@ -110,7 +111,7 @@ namespace BGP_Router.Masiina
         }
 
         public bool mTCPConnectionFails;
-        public bool sTCPConnectionFails
+        public bool TCPConnectionFails
         {
             get { return mTCPConnectionFails; }
             set
@@ -131,7 +132,7 @@ namespace BGP_Router.Masiina
         public event EventHandler BGPUpdateMessageError_Event;
 
         public bool mBGPOpenMessage;
-        public bool sBGPOpenMessage
+        public bool BGPOpenMessage
         {
             get { return mBGPOpenMessage; }
             set
@@ -141,7 +142,7 @@ namespace BGP_Router.Masiina
             }
         }
         public bool mBGPOpenMessageReceived;
-        public bool sBGPOpenMessageReceive
+        public bool BGPOpenMessageReceive
         {
             get { return mBGPOpenMessageReceived; }
             set
@@ -151,7 +152,7 @@ namespace BGP_Router.Masiina
             }
         }
         public bool mBGPHeaderError;
-        public bool sBGPHeaderError
+        public bool BGPHeaderError
         {
             get { return mBGPHeaderError; }
             set
@@ -161,7 +162,7 @@ namespace BGP_Router.Masiina
             }
         }
         public bool mBGPOpenMessageError;
-        public bool sBGPOpenMessageError
+        public bool BGPOpenMessageError
         {
             get { return mBGPOpenMessageError; }
             set
@@ -172,7 +173,7 @@ namespace BGP_Router.Masiina
         }
 
         public bool mBGPNotifyMessageError;
-        public bool sBGPNotifyMessageError
+        public bool BGPNotifyMessageError
         {
             get { return mBGPNotifyMessageError; }
             set
@@ -182,7 +183,7 @@ namespace BGP_Router.Masiina
             }
         }
         public bool mBGPNotifyMessage;
-        public bool sBGPNotifyMessage
+        public bool BGPNotifyMessage
         {
             get { return mBGPNotifyMessage; }
             set
@@ -192,7 +193,7 @@ namespace BGP_Router.Masiina
             }
         }
         public bool mBGPKeepAliveMessage;
-        public bool sBGPKeepAliveMessage
+        public bool BGPKeepAliveMessage
         {
             get { return mBGPKeepAliveMessage; }
             set
@@ -202,7 +203,7 @@ namespace BGP_Router.Masiina
             }
         }
         public bool mBGPUpdateMessage;
-        public bool sBGPUpdateMessage
+        public bool BGPUpdateMessage
         {
             get { return mBGPUpdateMessage; }
             set
@@ -212,7 +213,7 @@ namespace BGP_Router.Masiina
             }
         }
         public bool mBGPUpdateMessageError;
-        public bool sBGPUpdateMessageError
+        public bool BGPUpdateMessageError
         {
             get { return mBGPUpdateMessageError; }
             set
