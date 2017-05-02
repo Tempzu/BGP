@@ -45,7 +45,7 @@
   <ItemGroup>
     <Compile Include="BGP\Router.cs" />
     <Compile Include="BGP\HandlePackets.cs" />
-    <Compile Include="BGP\InitializingListenersSpeaker.cs" />
+    <Compile Include="BGP\InitializingListenersSpeakers.cs" />
     <Compile Include="BGP\Listener.cs" />
     <Compile Include="BGP\RouterClose.cs" />
     <Compile Include="BGP\Routing_table.cs" />
