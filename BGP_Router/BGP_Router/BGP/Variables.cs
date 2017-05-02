@@ -25,6 +25,10 @@ namespace BGP_Router.BGP
         public static string As1_IP_Prefix = "127.1.0.";
         public static string As2_IP_Prefix = "127.2.0.";
         public static string As3_IP_Prefix = "127.3.0.";
+        public static int as1Last;
+        public static int as2First;
+        public static int as2Last;
+        public static int as3First;
         //public static ushort autonomousSystemSpeaker;
         //public static ushort autonomousSystemListner;
         public static ushort PacketAS;
