@@ -389,28 +389,39 @@ namespace BGP_Router.Masiina
                 }
             }
         }
-        public void sendNotifyMsg(int adj, int AS, string error)
+        public void sendNotifyMsg(int removedRouteN, int AS, string error)
         {
             Listener bgpListener = new Listener();
             Speaker bgpSpeaker = new Speaker();
             String adjRIBItem;
-            Tuple<int, string> nlri = Variables.NLRI[adj];
-            Tuple<int, string> pathSegment = Variables.PathSegment[adj];
-            Tuple<int, string, int, ushort> pathAttribute = Variables.PathAttribute[adj];
-            Tuple<int, string, int, string, int, int, string, Tuple<string>> adj_RIB_Out = Variables.Adj_RIB_Out[adj];
+            Console.WriteLine("Poistettava reitti nro: " + removedRouteN);
+            /*Console.WriteLine("NLRI ennen kaatuilua:"+Variables.NLRI[removedRouteN]);
+            //Tuple<int, string> nlri = Variables.NLRI[removedRouteN];
+            Tuple<int, string> nlri = (5, "127.2");
+            Console.WriteLine("NLRI: "+ nlri);*/
+            //Tuple<int, string> pathSegment = Variables.PathSegment[removedRouteN];
+            /*Tuple<int, string, int, ushort> pathAttribute = Variables.PathAttribute[removedRouteN];
+            Tuple<int, string, int, string, int, int, string, Tuple<string>> adj_RIB_Out = Variables.Adj_RIB_Out[removedRouteN];
 
-            if (adj < 4)
+            if (removedRouteN < 4)
             {
                 adjRIBItem = adj_RIB_Out.Item2;
+                Console.WriteLine("item1: " + adj_RIB_Out.Item1);
+                Console.WriteLine("item2: " + adj_RIB_Out.Item2);
+                Console.WriteLine("item3: " + adj_RIB_Out.Item3);
+                Console.WriteLine("item4: " + adj_RIB_Out.Item4);
+                Console.WriteLine("item5: " + adj_RIB_Out.Item5);
+                Console.WriteLine("item6: " + adj_RIB_Out.Item6);
+                Console.WriteLine("item7: " + adj_RIB_Out.Item7);
             }
             else
             {
                 adjRIBItem = adj_RIB_Out.Item4;
-            }
+            }*/
 
-            if (Variables.WithdrawnRoutes.ContainsKey(adj))
+            if (Variables.WithdrawnRoutes.ContainsKey(removedRouteN))
             {
-                Tuple<string, int> withdrawlInfo = Variables.WithdrawnRoutes[adj];
+                Tuple<string, int> withdrawlInfo = Variables.WithdrawnRoutes[removedRouteN];
                 Variables.Withdrawl_IP_Address = withdrawlInfo.Item1;
                 Variables.Withdrawl_Length = withdrawlInfo.Item2;
             }
@@ -422,7 +433,7 @@ namespace BGP_Router.Masiina
             Notification notifyPacket = new Notification(Variables.ErrorCode, Variables.ErrorSubCode, error);
             foreach (KeyValuePair<int, Tuple<string, ushort, string, ushort>> speakerListner in Variables.ConnectionSpeakerAs_ListenerAs)
             {
-                if ((adjRIBItem == speakerListner.Value.Item3) && (speakerListner.Value.Item2 == AS) && (speakerListner.Value.Item4 == AS))
+                if (/*(adjRIBItem == speakerListner.Value.Item3) && */(speakerListner.Value.Item2 == AS) && (speakerListner.Value.Item4 == AS))
                 {
                     foreach (KeyValuePair<int, Socket> listner in Variables.ListenerSocketDictionary)
                     {
@@ -441,7 +452,7 @@ namespace BGP_Router.Masiina
                         }
                     }
                 }
-                if ((adjRIBItem == speakerListner.Value.Item1) && (speakerListner.Value.Item2 == AS) && (speakerListner.Value.Item4 == AS))
+                if (/*(adjRIBItem == speakerListner.Value.Item1) && */(speakerListner.Value.Item2 == AS) && (speakerListner.Value.Item4 == AS))
                 {
                     foreach (KeyValuePair<int, Socket> speaker in Variables.SpeakerSocketDictionary)
                     {
