@@ -1,10 +1,6 @@
 using System;
 using System.Collections.Generic;
-//using System.Net;
 using System.Net.Sockets;
-//using System.Linq;
-//using System.Text;
-//using System.Threading.Tasks;
 using System.Data;
 using System.Collections.Concurrent;
 
@@ -19,9 +15,9 @@ namespace BGP_Router.BGP
         public static ushort AS1 = 1;
         public static ushort AS2 = 2;
         public static ushort AS3 = 3;
-        public static string PrefixAS1 = "127.1";
-        public static string PrefixAS2 = "127.2";
-        public static string PrefixAS3 = "127.3";
+        public static string PrefixAS1 = "127.1"; //Set the ASs to local host loopback addresses
+        public static string PrefixAS2 = "127.2"; //Set the ASs to local host loopback addresses
+        public static string PrefixAS3 = "127.3"; //Set the ASs to local host loopback addresses
         public static string As1_IP_Prefix = "127.1.0.";
         public static string As2_IP_Prefix = "127.2.0.";
         public static string As3_IP_Prefix = "127.3.0.";
@@ -29,8 +25,6 @@ namespace BGP_Router.BGP
         public static int as2First;
         public static int as2Last;
         public static int as3First;
-        //public static ushort autonomousSystemSpeaker;
-        //public static ushort autonomousSystemListner;
         public static ushort PacketAS;
         public static int ListenerConnectionCount;
         public static int SpeakerConnectionCount;
@@ -49,11 +43,9 @@ namespace BGP_Router.BGP
         public static ushort BGPVersion = 4;
         public static ushort HoldTime = 4;
         public static ushort OptimalParameterLength = 0;
-        //implement IP
         public static string SpeakerIPAddress;
         public static string ListenerIPAddress;
 
-        //connectCount and Listner
         //ConcurrentDictionary is used for the thread safety
         public static ConcurrentDictionary<string, ushort> SpeakerAS = new ConcurrentDictionary<string, ushort>();
         public static ConcurrentDictionary<string, ushort> ListenerAS = new ConcurrentDictionary<string, ushort>();
@@ -77,6 +69,7 @@ namespace BGP_Router.BGP
         public static Dictionary<int, Tuple<string, int>> WithdrawnRoutes = new Dictionary<int, Tuple<string, int>>();
         public static Dictionary<int, Tuple<int, string>> PathSegment = new Dictionary<int, Tuple<int, string>>();
         public static Dictionary<int, string> InterAS_IP = new Dictionary<int, string>();
+       
         //Notification Message Variables
         public static ushort ErrorCode = 6;
         public static ushort ErrorSubCode = 8;
