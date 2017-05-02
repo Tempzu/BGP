@@ -89,6 +89,7 @@ namespace BGP_Router.BGP
             }
 
             // Now that the user has configured the autonomous systems, we can create the listener routers to the according ASs.
+            Console.Write("\n----Setting up routers to the autonomous systems----\n");
             for (int i = 0; i < 10; i++)
             {
 
