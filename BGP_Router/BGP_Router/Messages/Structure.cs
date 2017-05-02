@@ -16,7 +16,7 @@ namespace BGP_Router.Messages
         public ulong marker;
         public Structure(ulong marker, int length)
         {
-            // Message header marker is 16-octets with 32 slots
+            // Message header marker is 16-octets with 32 slots, value set to be all ones!
             // Message length is 3 octets with 6 slots
 
             mBuffer = new byte[marker];
