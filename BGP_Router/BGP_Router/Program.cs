@@ -5,6 +5,8 @@ using System.Threading;
 
 namespace BGPSimulator
 {
+    // https://tools.ietf.org/html/rfc4271 web page which was used for every major class in BGP
+    
     public static class Program
     {
 
