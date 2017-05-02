@@ -13,14 +13,14 @@ namespace BGP_Router.BGP
         public static DataTable GetTable()
         {
             Variables.ConnectionSpeakerAs_ListenerAs.Clear();
-            // Here we create a DataTable with five columns.
-            DataTable Routing_Table = new DataTable();
-            Routing_Table.Columns.Add("Connection", typeof(int));
-            Routing_Table.Columns.Add("Network", typeof(string));
-            Routing_Table.Columns.Add("AS_Number", typeof(int));
-            Routing_Table.Columns.Add("NextHop", typeof(string));
-            Routing_Table.Columns.Add("AS_NextHop", typeof(int));
-            
+            // Here we create a DataTable with six columns.
+            DataTable Routes_Table = new DataTable();
+            Routes_Table.Columns.Add("Connection", typeof(int));
+            Routes_Table.Columns.Add("Network", typeof(string));
+            Routes_Table.Columns.Add("AS_Number", typeof(int));
+            Routes_Table.Columns.Add("NextHop", typeof(string));
+            Routes_Table.Columns.Add("AS_NextHop", typeof(int));
+            Routes_Table.Columns.Add("IGP/EGP", typeof(int));
             // Method for finding pairs to each peer in the system. Creates the routing table with the pre-set entities.
             foreach (KeyValuePair<int, string> pair in Variables.ConnectionAndListener)
             {
@@ -29,7 +29,7 @@ namespace BGP_Router.BGP
                     if (Variables.ListenerAS[pair.Value] == Variables.SpeakerAS[Variables.ConnectionAndSpeaker[pair.Key]])
                     {
 
-                        Routing_Table.Rows.Add(pair.Key, Variables.ConnectionAndSpeaker[pair.Key], Variables.SpeakerAS[Variables.ConnectionAndSpeaker[pair.Key]],
+                        Routes_Table.Rows.Add(pair.Key, Variables.ConnectionAndSpeaker[pair.Key], Variables.SpeakerAS[Variables.ConnectionAndSpeaker[pair.Key]],
                           pair.Value, Variables.ListenerAS[pair.Value], 0);
                         Tuple<string, ushort, string, ushort> conSpeakerAs_ListnerAs = new Tuple<string, ushort, string, ushort>(Variables.ConnectionAndSpeaker[pair.Key],
                            Variables.SpeakerAS[Variables.ConnectionAndSpeaker[pair.Key]], pair.Value, Variables.ListenerAS[pair.Value]);
@@ -37,7 +37,7 @@ namespace BGP_Router.BGP
                     }
                     else
                     {
-                        Routing_Table.Rows.Add(pair.Key, Variables.ConnectionAndSpeaker[pair.Key], Variables.SpeakerAS[Variables.ConnectionAndSpeaker[pair.Key]],
+                        Routes_Table.Rows.Add(pair.Key, Variables.ConnectionAndSpeaker[pair.Key], Variables.SpeakerAS[Variables.ConnectionAndSpeaker[pair.Key]],
                             pair.Value, Variables.ListenerAS[pair.Value], 1);
                         Tuple<string, ushort, string, ushort> connectionSpeakerAs_ListenerAs = new Tuple<string, ushort, string, ushort>(Variables.ConnectionAndSpeaker[pair.Key],
                            Variables.SpeakerAS[Variables.ConnectionAndSpeaker[pair.Key]], pair.Value, Variables.ListenerAS[pair.Value]);
@@ -51,7 +51,7 @@ namespace BGP_Router.BGP
 
             }
 
-            return Routing_Table;
+            return Routes_Table;
         }
 
         // Simple methods for printing out the corresponding routing tables to each AS.
