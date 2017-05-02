@@ -178,7 +178,6 @@ namespace BGP_Router.Masiina
 
             if (mBGPOpenMessageReceived == true)
             {
-                Console.WriteLine("Successful BGP Open Message!");
                 ConnectionRetryTimer_Reset();
                 //send OPEN message
                 Listener Listener = new Listener();
