@@ -59,7 +59,7 @@ namespace BGP_Router.BGP
         {
         
             Console.WriteLine("BGP routing table for AS1");
-            Console.WriteLine("Connection" + "   Router    " + " AS Group  " + "   NextHop  " + " AS NextHop ");
+            Console.WriteLine("Connection" + "     Router  " + "  AS  " + "   NextHop  " + "NextHop AS " + " I/E");
             // Loop for filling out each rows with corresponding information.
             foreach (DataRow row in Variables.Data.Rows)
             {
@@ -68,11 +68,11 @@ namespace BGP_Router.BGP
                     if (row.Field<int>(0) < 10)
                     {
                         Console.WriteLine("     " + row.Field<int>(0) + "        " + row.Field<string>(1) + "  " + row.Field<int>(2) + "     "
-                        + row.Field<string>(3) + "    " + row.Field<int>(4) + "       " + row.Field<int>(5));
+                        + row.Field<string>(3) + "    " + row.Field<int>(4) + "        " + row.Field<int>(5));
                     }
                     else
                         Console.WriteLine("     " + row.Field<int>(0) + "       " + row.Field<string>(1) + "  " + row.Field<int>(2) + "     "
-                            + row.Field<string>(3) + "    " + row.Field<int>(4) + "       " + row.Field<int>(5));
+                            + row.Field<string>(3) + "    " + row.Field<int>(4) + "        " + row.Field<int>(5));
                 }
 
             }
@@ -80,7 +80,7 @@ namespace BGP_Router.BGP
         public void DisplayDataAS2()
         {
             Console.WriteLine("BGP routing table for AS2");
-            Console.WriteLine("Connection" + "   Router    " + " AS Group  " + "   NextHop  " + " AS NextHop ");
+            Console.WriteLine("Connection" + "     Router  " + "  AS  " + "   NextHop  " + "NextHop AS " + " I/E");
             // Loop for filling out each rows with corresponding information.
             foreach (DataRow row in Variables.Data.Rows)
             {
@@ -90,18 +90,18 @@ namespace BGP_Router.BGP
                     if (row.Field<int>(0) < 10)
                     {
                         Console.WriteLine("     " + row.Field<int>(0) + "        " + row.Field<string>(1) + "  " + row.Field<int>(2) + "     "
-                        + row.Field<string>(3) + "    " + row.Field<int>(4) + "       " + row.Field<int>(5));
+                        + row.Field<string>(3) + "    " + row.Field<int>(4) + "        " + row.Field<int>(5));
                     }
                     else
                         Console.WriteLine("     " + row.Field<int>(0) + "       " + row.Field<string>(1) + "  " + row.Field<int>(2) + "     "
-                            + row.Field<string>(3) + "    " + row.Field<int>(4) + "       " + row.Field<int>(5));
+                            + row.Field<string>(3) + "    " + row.Field<int>(4) + "        " + row.Field<int>(5));
                 }
             }
         }
         public void DisplayDataAS3()
         {
             Console.WriteLine("BGP routing table for AS3");
-            Console.WriteLine("Connection" + "   Router   " + " AS Group  " + "   NextHop  " + " AS NextHop ");
+            Console.WriteLine("Connection" + "     Router  " + "  AS  " + "   NextHop  " + "NextHop AS " + " I/E");
             // Loop for filling out each rows with corresponding information.
             foreach (DataRow row in Variables.Data.Rows)
             {
@@ -111,11 +111,11 @@ namespace BGP_Router.BGP
                      if (row.Field<int>(0) < 10)
                     {
                         Console.WriteLine("     " + row.Field<int>(0) + "        " + row.Field<string>(1) + "  " + row.Field<int>(2) + "     "
-                        + row.Field<string>(3) + "    " + row.Field<int>(4) + "       " + row.Field<int>(5));
+                        + row.Field<string>(3) + "    " + row.Field<int>(4) + "        " + row.Field<int>(5));
                     }
                     else
                         Console.WriteLine("     " + row.Field<int>(0) + "       " + row.Field<string>(1) + "  " + row.Field<int>(2) + "     "
-                            + row.Field<string>(3) + "    " + row.Field<int>(4) + "       " + row.Field<int>(5));
+                            + row.Field<string>(3) + "    " + row.Field<int>(4) + "        " + row.Field<int>(5));
                 }
             }
         }
