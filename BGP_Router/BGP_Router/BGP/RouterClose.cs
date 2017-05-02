@@ -19,15 +19,18 @@ namespace BGP_Router.BGP
         string stringValue;
         Socket socket;
         ushort tempAS;
-        public void CloseSpeakerlistener(string ipAddress, int adj, int AS)
+
+        public void CloseSpeakerlistener(string ipAddress, int rnumber, int AS)
         {
             closeSpeaker(ipAddress);
             closelistener(ipAddress);
-            withadrawlRoutes(ipAddress, value);
+            Variables.removedRouteN++;
+            Console.WriteLine("Key: " + Variables.removedRouteN);
+            withadrawlRoutes(ipAddress, rnumber, Variables.removedRouteN, AS);
             update();
-            sendNotificationMsg(adj, AS);
-
+            sendNotificationMsg(Variables.removedRouteN, AS);
         }
+
         public void closeSpeaker(string ipAddress)
         {
 
@@ -124,27 +127,28 @@ namespace BGP_Router.BGP
             }
 
         }
-        public void withadrawlRoutes(string ipPrefix, int AS)
+        public void withadrawlRoutes(string ipPrefix, int rnumber, int removedRouteN, int AS)
         {
             //Variables.withdrawnRoutes.Clear();
             Tuple<string, int> withdrawl_Routes = new Tuple<string, int>(ipPrefix, ipPrefix.Length);
             //Variables.withdrawl_IP_Address = ipPrefix;
-            Variables.WithdrawnRoutes.Add(AS, withdrawl_Routes);
+            Console.WriteLine("Trying to remove router number: " + rnumber + ", from AS: " + AS);
+            Variables.WithdrawnRoutes.Add(removedRouteN, withdrawl_Routes);
         }
-        public void sendNotificationMsg(int adj, int AS)
+        public void sendNotificationMsg(int removedRouteN, int AS)
         {
-            if (adj == 1)
+           /* if (rnumber == 1)
+            {*/
+                UpdateHandler.sendNotifyMsg(removedRouteN, AS, "Router connection is removed");
+            /*}
+            if (rnumber == 3)
             {
-                UpdateHandler.sendNotifyMsg(adj, AS, "Router conection is Ceased");
+                UpdateHandler.sendNotifyMsg(rnumber, AS, "Router conection is Ceased");
             }
-            if (adj == 3)
+            if (rnumber == 4)
             {
-                UpdateHandler.sendNotifyMsg(adj, AS, "Router conection is Ceased");
-            }
-            if (adj == 4)
-            {
-                UpdateHandler.sendNotifyMsg(adj, AS, "Router conection is Ceased");
-            }
+                UpdateHandler.sendNotifyMsg(rnumber, AS, "Router conection is Ceased");
+            }*/
 
         }
         public void update()
