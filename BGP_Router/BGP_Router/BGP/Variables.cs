@@ -25,6 +25,8 @@ namespace BGP_Router.BGP
         public static int as2First;
         public static int as2Last;
         public static int as3First;
+        public static int removedRouteN;
+        
         public static ushort PacketAS;
         public static int ListenerConnectionCount;
         public static int SpeakerConnectionCount;
