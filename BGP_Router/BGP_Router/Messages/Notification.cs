@@ -8,6 +8,10 @@ namespace BGP_Router.Messages
 {
     class Notification : Structure
     {
+        /* Consists of error code (1-octet) + error subcode (1-octet) + Data (variable)
+         * The minimun length of notification message is 21 octets. 
+         */
+
         private ushort mErrorCode;
         private ushort mErrorSubCode;
         private string mData;
@@ -21,6 +25,7 @@ namespace BGP_Router.Messages
             ErrorSubCode = errorSubcode;
             Data = data;
         }
+        // The information fields are set to the corresponding places in the message fields.
         public ushort Type
         {
             get
