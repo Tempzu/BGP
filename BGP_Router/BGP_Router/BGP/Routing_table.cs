@@ -53,7 +53,7 @@ namespace BGP_Router.BGP
 
             return Routes_Table;
         }
-
+        string temp; //For printing internal/external
         // Simple methods for printing out the corresponding routing tables to each AS.
         public void DisplayDataAS1()
         {
@@ -65,14 +65,21 @@ namespace BGP_Router.BGP
             {
                 if (row.Field<int>(2) == 1 || row.Field<int>(4) == 1)
                 {
+                    if (row.Field<int>(5) == 1)
+                    {
+                        temp = "E";
+                    }else
+                    {
+                        temp = "I";
+                    }
                     if (row.Field<int>(0) < 10)
                     {
                         Console.WriteLine("     " + row.Field<int>(0) + "        " + row.Field<string>(1) + "  " + row.Field<int>(2) + "     "
-                        + row.Field<string>(3) + "    " + row.Field<int>(4) + "        " + row.Field<int>(5));
+                        + row.Field<string>(3) + "    " + row.Field<int>(4) + "         " + temp);
                     }
                     else
                         Console.WriteLine("     " + row.Field<int>(0) + "       " + row.Field<string>(1) + "  " + row.Field<int>(2) + "     "
-                            + row.Field<string>(3) + "    " + row.Field<int>(4) + "        " + row.Field<int>(5));
+                            + row.Field<string>(3) + "    " + row.Field<int>(4) + "         " + temp);
                 }
 
             }
@@ -87,14 +94,21 @@ namespace BGP_Router.BGP
                 if (row.Field<int>(2) == 2 || row.Field<int>(4) == 2)
                 {
                    
+                    if (row.Field<int>(5) == 1)
+                    {
+                        temp = "E";
+                    }else
+                    {
+                        temp = "I";
+                    }
                     if (row.Field<int>(0) < 10)
                     {
                         Console.WriteLine("     " + row.Field<int>(0) + "        " + row.Field<string>(1) + "  " + row.Field<int>(2) + "     "
-                        + row.Field<string>(3) + "    " + row.Field<int>(4) + "        " + row.Field<int>(5));
+                        + row.Field<string>(3) + "    " + row.Field<int>(4) + "         " + temp);
                     }
                     else
                         Console.WriteLine("     " + row.Field<int>(0) + "       " + row.Field<string>(1) + "  " + row.Field<int>(2) + "     "
-                            + row.Field<string>(3) + "    " + row.Field<int>(4) + "        " + row.Field<int>(5));
+                            + row.Field<string>(3) + "    " + row.Field<int>(4) + "         " + temp);
                 }
             }
         }
@@ -108,14 +122,21 @@ namespace BGP_Router.BGP
                 if (row.Field<int>(2) == 3 || row.Field<int>(4) == 3)
                 {
                    
-                     if (row.Field<int>(0) < 10)
+                     if (row.Field<int>(5) == 1)
+                    {
+                        temp = "E";
+                    }else
+                    {
+                        temp = "I";
+                    }
+                    if (row.Field<int>(0) < 10)
                     {
                         Console.WriteLine("     " + row.Field<int>(0) + "        " + row.Field<string>(1) + "  " + row.Field<int>(2) + "     "
-                        + row.Field<string>(3) + "    " + row.Field<int>(4) + "        " + row.Field<int>(5));
+                        + row.Field<string>(3) + "    " + row.Field<int>(4) + "         " + temp);
                     }
                     else
                         Console.WriteLine("     " + row.Field<int>(0) + "       " + row.Field<string>(1) + "  " + row.Field<int>(2) + "     "
-                            + row.Field<string>(3) + "    " + row.Field<int>(4) + "        " + row.Field<int>(5));
+                            + row.Field<string>(3) + "    " + row.Field<int>(4) + "         " + temp);
                 }
             }
         }
