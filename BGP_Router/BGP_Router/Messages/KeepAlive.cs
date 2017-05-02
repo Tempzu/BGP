@@ -6,11 +6,19 @@ using System.Threading.Tasks;
 
 namespace BGP_Router.Messages
 {
-    class KeepAlive : Structure
+    /* A KEEPALIVE message consists of only the message header and has a
+   length of 19 bytes. The send interval is defaultly 60s. 
 
+    */
+
+    class KeepAlive : Structure
+    
+        // Basic message structure for KEEPALIVE message
+        // Message fields represented by the numbers
     {
         private ushort mType;
-        public KeepAlive() : base((ushort)(40), 19)
+
+        public KeepAlive() : base ((ushort)(38 + 2), 19)
         {
             Type = 4;
         }
