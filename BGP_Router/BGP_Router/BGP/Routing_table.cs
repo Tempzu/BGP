@@ -62,8 +62,8 @@ namespace BGP_Router.BGP
             // This uses the GetTable method (please paste it in).
             //GlobalVariables.data = GetTable();
 
-            Console.WriteLine("BGP ROUTING TABLE OF AS 1 where IGP = 0 and EGP = 1");
-            Console.WriteLine("Connection" + "   Network   " + " AS_Number " + "   NextHop  " + " AS_NextHop " + "  IGP/EGP ");
+            Console.WriteLine("BGP ROUTING TABLE OF AS 1");
+            Console.WriteLine("Connection" + "   Network   " + " AS_Number " + "   NextHop  " + " AS_NextHop ");
             // ... Loop over all rows.
             foreach (DataRow row in Variables.Data.Rows)
             {
@@ -81,8 +81,8 @@ namespace BGP_Router.BGP
         {
             // This uses the GetTable method (please paste it in).
 
-            Console.WriteLine("BGP ROUTING TABLE OF AS2 where IGP = 0 and EGP = 1");
-            Console.WriteLine("Connection" + "   Network   " + " AS_Number " + "   NextHop  " + " AS_NextHop " + "  IGP/EGP ");
+            Console.WriteLine("BGP ROUTING TABLE OF AS2");
+            Console.WriteLine("Connection" + "   Network   " + " AS_Number " + "   NextHop  " + " AS_NextHop ");
             // ... Loop over all rows.
             foreach (DataRow row in Variables.Data.Rows)
             {
@@ -99,8 +99,8 @@ namespace BGP_Router.BGP
         {
             // This uses the GetTable method (please paste it in).
 
-            Console.WriteLine("BGP ROUTING TABLE where IGP = 0 and EGP = 1");
-            Console.WriteLine("Connection" + "   Network   " + " AS_Number " + "   NextHop  " + " AS_NextHop " + "  IGP/EGP ");
+            Console.WriteLine("BGP ROUTING TABLE OF AS3");
+            Console.WriteLine("Connection" + "   Network   " + " AS_Number " + "   NextHop  " + " AS_NextHop ");
             // ... Loop over all rows.
             foreach (DataRow row in Variables.Data.Rows)
             {
