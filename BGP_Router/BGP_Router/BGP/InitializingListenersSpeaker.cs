@@ -1,9 +1,9 @@
 using System;
 using BGP_Router.Messages;
-using System.Net.Sockets;
-using BGP_Router.Masiina;
-using System.Net;
 using System.Threading;
+
+
+/* In this class routers are created to the autonomous systems according to the user's allocation wishes.*/
 
 namespace BGP_Router.BGP
 {
@@ -14,20 +14,17 @@ namespace BGP_Router.BGP
 
         private static AutoResetEvent speakerConnectionRequest = new AutoResetEvent(true);
 
-        //to create 13 speaker for 10 routers
         int m = 0;
-        //to create 14 different connection
         int n = 0;
         public ushort AS;
-
-        //to create variables to help in splitting routers into 3 AS
+        //variables to help in splitting routers into 3 AS
         int as1Last;
         int as2First;
         int as2Last;
         int as3First;
         string temp;
 
-        public void StartListener()
+        public void StartListener() // user can configure the autonomous systems
         {
             Console.WriteLine("There is a total of 10 routers which will be split into 3 AS. How many routers do you want in AS1? (1-8)");
             temp = Console.ReadLine();
@@ -36,12 +33,12 @@ namespace BGP_Router.BGP
                 as1Last = int.Parse(temp) - 1; //-1 since routers start from 0 
                 if (as1Last < 0)
                 {
-                    Console.WriteLine("The character you typed wasn't in the given bounds, so we set 1 routers in the AS1.");
+                    Console.WriteLine("The character you typed wasn't in the given bounds, so we set 1 router in AS1.");
                     as1Last = 0;
                 }
                 else if (as1Last > 7)
                 {
-                    Console.WriteLine("The character you typed wasn't in the given bounds, so we set 8 routers in the AS1.");
+                    Console.WriteLine("The character you typed wasn't in the given bounds, so we set 8 routers in AS1.");
                     as1Last = 7;
                 }
             }
@@ -55,11 +52,11 @@ namespace BGP_Router.BGP
                 as2First = as1Last + 1;
                 if (as1Last > 0)
                 {
-                    Console.WriteLine("How many routers do you want in AS2? (1-" + (8 - as1Last) + "). Rest will be placed AS3.");
+                    Console.WriteLine("How many routers do you want in AS2? (1-" + (8 - as1Last) + "). Rest will be placed in AS3.");
                 }
                 else
                 {
-                    Console.WriteLine("How many routers do you want in AS2? (1-8). Rest will be placed AS3.");
+                    Console.WriteLine("How many routers do you want in AS2? (1-8). Rest will be placed in AS3.");
                 }
                 temp = Console.ReadLine();
                 try
@@ -67,7 +64,7 @@ namespace BGP_Router.BGP
                     as2Last = as1Last + int.Parse(temp);
                     if (as2Last <= as1Last)
                     {
-                        Console.WriteLine("The character you typed wasn't in the given bounds, so we set 1 routers in the AS2.");
+                        Console.WriteLine("The character you typed wasn't in the given bounds, so we set 1 router in AS2.");
                         as2Last = as1Last + 1;
                     }
                     else if (as2Last > 8)
@@ -91,7 +88,7 @@ namespace BGP_Router.BGP
                 as3First = 9;
             }
 
-
+            // Now that the user has configured the autonomous systems, we can create the listener routers to the according ASs.
             for (int i = 0; i < 10; i++)
             {
 
@@ -123,14 +120,13 @@ namespace BGP_Router.BGP
                 }
 
                 Thread.Sleep(500);
-                //recient computers can handle 500 connections
             }
 
 
         }
 
 
-        public void StartListening()
+        public void StartListening() //Set the created listener sockets/routers to start listening for traffic
         {
 
 
@@ -142,7 +138,7 @@ namespace BGP_Router.BGP
 
 
         }
-        public void StartSpeaker()
+        public void StartSpeaker() //Create the speaker sockets for the routers
         {
             for (int k = 0; k < 10; k++)
             {
@@ -223,8 +219,6 @@ namespace BGP_Router.BGP
                     BGPSpeaker[m].BindSpeaker(Variables.As3_IP_Prefix + k, Variables.SpeakerPortNumber + 1, m);
 
                 }
-
-                //BGPSpeaker[k].Bind("127.1.0.1", 179, m);
                 m++;
 
                 Thread.Sleep(500);
@@ -232,7 +226,7 @@ namespace BGP_Router.BGP
             }
 
         }
-        public void SpeakerConnection_Init()
+        public void SpeakerConnection_Init() //Initialize the speakers
         {
             for (int k = 0; k < 10; k++)
             {
@@ -381,10 +375,6 @@ namespace BGP_Router.BGP
             {
 
                 Variables.SpeakerConnectionCount = k;
-
-                //Console.WriteLine("*********** SPEAKER NUMBER**************** : " + k);
-
-                //OpenMessage(ushort type, ushort version,ushort myAS, ushort holdTime, string BGPIdentifier, ushort optimalParLength)
                 Open OpenPacket = new Open(Variables.BGPVersion, Variables.SpeakerConnectionAndAS[(ushort)k], Variables.HoldTime,
                     Variables.ConnectionAndSpeaker[k], Variables.OptimalParameterLength);
 
