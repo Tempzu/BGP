@@ -163,7 +163,7 @@ namespace BGP_Router.BGP
                 if (mMessage == "")
                 {
                     BGPSpeakerOpenMsg.WaitOne();
-                    Console.WriteLine("#### BGP Speaker: " + IPAddress.Parse(((IPEndPoint)speakerSocket.LocalEndPoint).Address.ToString()) + " has sent an OPEN message ####");
+                    Console.WriteLine("#### Speaker: " + IPAddress.Parse(((IPEndPoint)speakerSocket.LocalEndPoint).Address.ToString()) + " has sent an OPEN message ####");
                     BGPSpeakerOpenMsg.Set();
                     BGPSpeakerOpenMsgState.WaitOne();
                     Console.WriteLine("---- Speaker : {0} is in {1} state ----", IPAddress.Parse(((IPEndPoint)speakerSocket.LocalEndPoint).Address.ToString()), Variables.SpeakerConnectionStatus);
