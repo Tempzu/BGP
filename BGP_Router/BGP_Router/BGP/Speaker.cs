@@ -3,7 +3,6 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using BGP_Router.Masiina;
-using BGP_Router.Messages;
 
 namespace BGP_Router.BGP
 {
@@ -12,43 +11,29 @@ namespace BGP_Router.BGP
 
         public Socket[] tempSocket = new Socket[14];
         FSM FSM_Speaker = new FSM();
-        public bool conectionFlag;
-        public int SpeakerID;
-        public int ListenerID;
-        public string message = "";
+        public bool mConnectionFlag;
+        public int mSpeakerID;
+        public int mListenerID;
+        public string mMessage = "";
 
-
-        private static AutoResetEvent speakerConnectionRequest = new AutoResetEvent(true);
-        private static AutoResetEvent completeSpeakerConnection = new AutoResetEvent(true);
+        private static AutoResetEvent SpeakerConnectionRequest = new AutoResetEvent(true);
+        private static AutoResetEvent CompleteSpeakerConnection = new AutoResetEvent(true);
         private static AutoResetEvent BGPSpeakerState = new AutoResetEvent(true);
         private static AutoResetEvent BGPSpeakerOpenMsg = new AutoResetEvent(true);
         private static AutoResetEvent BGPSpeakerOpenMsgState = new AutoResetEvent(true);
-
         private static AutoResetEvent BGPListenerState = new AutoResetEvent(true);
         private static AutoResetEvent BGPListenerOpenMsgState = new AutoResetEvent(true);
         private static AutoResetEvent BGPListenerUpdateMsgState = new AutoResetEvent(true);
         private static AutoResetEvent BGPListenerUpdateMsg = new AutoResetEvent(true);
 
-
-        //public int sendTo;
-
-
-        //since client doesnot need to listen to the connection but it only does connect to server
-        public void Connect(string ipAddress, int port, int speaker, int Listener)
+        public void Connect(string ipAddress, int port, int speaker, int listener) //Connect to a router
         {
-            // Connect to a remote device.
             try
             {
-
-                SpeakerID = speaker;
-                ListenerID = Listener;
-
-                speakerConnectionRequest.WaitOne();
-
-                //Console.WriteLine("IP ADDRESS: port : speaker ID : Listener ID :"+ipAddress +"  " + port + "  " + speaker + "  " + Listener);
-
+                mSpeakerID = speaker;
+                mListenerID = listener;
+                SpeakerConnectionRequest.WaitOne();
                 mSocketSpeaker.BeginConnect(new IPEndPoint(IPAddress.Parse(ipAddress), port), ConnectCallback, mSocketSpeaker);
-
             }
             catch (Exception e)
             {
@@ -59,50 +44,34 @@ namespace BGP_Router.BGP
         {
             try
             {
-                // we catch that connection we send and since AsyncState is a object so we set it as Socket to get connection
-                Socket speakerSocket = result.AsyncState as Socket;
+                Socket SpeakerSocket = result.AsyncState as Socket;
 
-                if (speakerSocket.Connected)
+                if (SpeakerSocket.Connected)
                 {
-                    conectionFlag = speakerSocket.Connected;
-
-                    //Variables.sucessfulConnection[Variables.i] = conectionFlag;
-                    //Variables.i++;
-                    Variables.True = conectionFlag;
-
-                    // when one client connection is accepted then it stops accepting other clients by EndAccept
-                    speakerSocket.EndConnect(result);
-
-                    speakerConnectionRequest.Set();
-
+                    mConnectionFlag = SpeakerSocket.Connected;
+                    Variables.True = mConnectionFlag;
+                    //End accepeting connections after a match
+                    SpeakerSocket.EndConnect(result);
+                    SpeakerConnectionRequest.Set();
                     //Store the speaker socket
-                    Variables.SpeakerSocketDictionary.TryAdd(Variables.CurrentSpeakerCount, speakerSocket);
+                    Variables.SpeakerSocketDictionary.TryAdd(Variables.CurrentSpeakerCount, SpeakerSocket);
                     Variables.CurrentSpeakerCount++;
-
-                    Variables.ListenerNumber = ListenerID;
-                    Variables.SpeakerIPAddress = ((IPEndPoint)speakerSocket.LocalEndPoint).Address.ToString();
-                    Variables.ListenerIPAddress = ((IPEndPoint)speakerSocket.RemoteEndPoint).Address.ToString();
-
-
-
-                    completeSpeakerConnection.WaitOne();
-
-                    Console.Write("BGP Speaker " + SpeakerID + " : " + IPAddress.Parse(((IPEndPoint)speakerSocket.LocalEndPoint).Address.ToString()) + " Connected to ---->" +
-                    "BGP Listener " + ListenerID + " : " + IPAddress.Parse(((IPEndPoint)speakerSocket.RemoteEndPoint).Address.ToString()));
-
+                    Variables.ListenerNumber = mListenerID;
+                    Variables.SpeakerIPAddress = ((IPEndPoint)SpeakerSocket.LocalEndPoint).Address.ToString();
+                    Variables.ListenerIPAddress = ((IPEndPoint)SpeakerSocket.RemoteEndPoint).Address.ToString();
+                    CompleteSpeakerConnection.WaitOne();
+                    Console.Write("\nConnection info:\nSpeaker " + mSpeakerID + " : " + IPAddress.Parse(((IPEndPoint)SpeakerSocket.LocalEndPoint).Address.ToString()) + " is connected to " +
+                    "listener " + mListenerID + " : " + IPAddress.Parse(((IPEndPoint)SpeakerSocket.RemoteEndPoint).Address.ToString()));
                     FSM_Speaker.TCPConnectionConfirmed(Variables.True);
-
-                    completeSpeakerConnection.Set();
-
+                    CompleteSpeakerConnection.Set();
                     BGPSpeakerState.WaitOne();
-                    //connectDone.Set();
-                    Console.WriteLine("BGP Listener : {0}| is in state : {1}", Variables.ListenerIPAddress, Variables.ListenerConnectionStatus);
+                    Console.WriteLine("\n---- Listener : {0} is in {1} state ---- ", Variables.ListenerIPAddress, Variables.ListenerConnectionStatus);
                     BGPSpeakerState.Set();
 
                 }
 
                 mBuffer = new byte[1024];
-                speakerSocket.BeginReceive(mBuffer, 0, mBuffer.Length, SocketFlags.None, ReceivedCallback, speakerSocket);
+                SpeakerSocket.BeginReceive(mBuffer, 0, mBuffer.Length, SocketFlags.None, ReceivedCallback, SpeakerSocket);
 
             }
             catch (Exception e)
@@ -112,36 +81,22 @@ namespace BGP_Router.BGP
 
         }
 
-
         private void ReceivedCallback(IAsyncResult result)
         {
             try
             {
-
                 BGPListenerState.WaitOne();
-                // Read data from the remote device.
-                //int bytesRead = client.EndReceive(result);
-                // we catch that connection we send and since AsyncState is a object so we set it as Socket to get connection
                 Socket speakerSocket = result.AsyncState as Socket;
                 int bufferLength = speakerSocket.EndReceive(result);
-
                 byte[] packet = new byte[bufferLength];
                 Array.Copy(mBuffer, packet, packet.Length);
                 BGPListenerState.Set();
-                // Signal that all bytes have been received.
-                // Signal that all bytes have been received.
-                //Console.Write("\n"+"BGP Speaker:" + IPAddress.Parse(((IPEndPoint)speakerSocket.LocalEndPoint).Address.ToString()) + " has RECIVED ");
-
-                //Handle packet here
-                BuildPacket.Handle(packet, speakerSocket);
-                //receiveDone.Set();
-                //FSM_Speaker.BGPOpenMsgRecivedSpeaker(Variables.True);
-
+                HandlePackets.Handle(packet, speakerSocket);
 
                 if (bufferLength == 58)
                 {
                     BGPListenerUpdateMsgState.WaitOne();
-                    Console.WriteLine("BGP Listener : {0}| is in state : {1}", IPAddress.Parse(((IPEndPoint)speakerSocket.RemoteEndPoint).Address.ToString()), Variables.ListenerConnectionStatus);
+                    Console.WriteLine("---- Listener : {0} is in {1} state -----", IPAddress.Parse(((IPEndPoint)speakerSocket.RemoteEndPoint).Address.ToString()), Variables.ListenerConnectionStatus);
                     BGPListenerUpdateMsgState.Set();
                 }
                 if (bufferLength == 40)
@@ -149,7 +104,7 @@ namespace BGP_Router.BGP
 
                     FSM_Speaker.BGPKeepAliveMessageSend(Variables.True);
                     BGPListenerOpenMsgState.WaitOne();
-                    Console.WriteLine("BGP Listener : {0}| is in state : {1}", IPAddress.Parse(((IPEndPoint)speakerSocket.RemoteEndPoint).Address.ToString()), Variables.ListenerConnectionStatus);
+                    Console.WriteLine("---- Listener : {0} is in {1} state -----", IPAddress.Parse(((IPEndPoint)speakerSocket.RemoteEndPoint).Address.ToString()), Variables.ListenerConnectionStatus);
                     BGPListenerOpenMsgState.Set();
                 }
 
@@ -162,7 +117,6 @@ namespace BGP_Router.BGP
             catch (ObjectDisposedException ex)
             {
                 Console.WriteLine("Speaker Connection is Closed");
-                // Don't care
             }
             catch (Exception e)
             {
@@ -175,10 +129,8 @@ namespace BGP_Router.BGP
             try
             {
                 Socket speakerSocket = speaker;
-                message = msg;
-                // Begin sending the data to the remote device.
+                mMessage = msg;
                 speakerSocket.BeginSend(data, 0, data.Length, 0, SendCallback, speakerSocket);
-                //BGPListenerUpdateMsg.WaitOne();
             }
             catch (Exception e)
             {
@@ -192,15 +144,7 @@ namespace BGP_Router.BGP
         {
             try
             {
-
-                // Begin sending the data to the remote device.
                 mSocketSpeaker.BeginSend(data, 0, data.Length, 0, SendCallback, mSocketSpeaker);
-                // Console.WriteLine("*********************** Speaker" + IPAddress.Parse(((IPEndPoint)_speakerSocket.LocalEndPoint).Address.ToString())
-                //   +"*********************** Listener" + IPAddress.Parse(((IPEndPoint)_speakerSocket.RemoteEndPoint).Address.ToString()));
-                //Thread.Sleep(1000);
-                //sendDone.WaitOne();
-
-
             }
             catch (Exception e)
             {
@@ -213,44 +157,18 @@ namespace BGP_Router.BGP
         {
             try
             {
-
-                // Retrieve the socket from the state object.
                 Socket speakerSocket = result.AsyncState as Socket;
-
-
-                // Complete sending the data to the remote device.
                 int bytesSent = speakerSocket.EndSend(result);
-
-
-
-                //sendDone.Set();
                 FSM_Speaker.BGPOpenMessageSent(Variables.True);
-                if (message == "")
+                if (mMessage == "")
                 {
                     BGPSpeakerOpenMsg.WaitOne();
-
-                    Console.WriteLine("BGP Speaker: " + IPAddress.Parse(((IPEndPoint)speakerSocket.LocalEndPoint).Address.ToString()) + " has SEND  OPEN MESSAGE !!");
-
+                    Console.WriteLine("#### BGP Speaker: " + IPAddress.Parse(((IPEndPoint)speakerSocket.LocalEndPoint).Address.ToString()) + " has sent an OPEN message ####");
                     BGPSpeakerOpenMsg.Set();
-
                     BGPSpeakerOpenMsgState.WaitOne();
-
-                    Console.WriteLine("BGP Speaker : {0}| is in state : {1}", IPAddress.Parse(((IPEndPoint)speakerSocket.LocalEndPoint).Address.ToString()), Variables.SpeakerConnectionStatus);
-
+                    Console.WriteLine("---- Speaker : {0} is in {1} state ----", IPAddress.Parse(((IPEndPoint)speakerSocket.LocalEndPoint).Address.ToString()), Variables.SpeakerConnectionStatus);
                     BGPSpeakerOpenMsgState.Set();
                 }
-                if (message == "Update")
-                {
-                    //BGPListenerUpdateMsg.Set();
-                    //Console.WriteLine("BGP Speaker: " + IPAddress.Parse(((IPEndPoint)speakerSocket.LocalEndPoint).Address.ToString()) + " has SEND  UPDATE MESSAGE !!");
-                    //Console.WriteLine("BGP Speaker : {0}| is in state : {1}", IPAddress.Parse(((IPEndPoint)speakerSocket.LocalEndPoint).Address.ToString()), Variables.speakerConnectionState);
-                }
-                if (message == "Notify")
-                {
-
-                }
-
-
             }
             catch (Exception e)
             {
