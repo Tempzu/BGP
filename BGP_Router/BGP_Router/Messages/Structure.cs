@@ -223,4 +223,3 @@ namespace BGP_Router.Messages
         public byte[] BGPmessage { get { return mBuffer; } }
     }
 }
-a
