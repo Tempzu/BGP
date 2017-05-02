@@ -61,19 +61,8 @@ namespace BGPSimulator
                         CreateUpdate.pathSegment();
                         break;
                     case "remove":
-                        Console.WriteLine("Type the AS and the number of the router you want to remove (for example, to remove 127.1.0.0 type '1' and '0')");
-                        Console.WriteLine("Type the AS");
-                        temp = Console.ReadLine();
-                        try
-                        {
-                            AS = int.Parse(temp);
-                        }
-                        catch
-                        {
-                            Console.WriteLine("The character you typed wasn't a number, try again by typing remove");
-                            break;
-                        }
-                        Console.WriteLine("Type the number");
+                        Console.WriteLine("Type the the number of the router you want to remove (for example, to remove 127.1.0.0 type '0')");
+                        
                         temp = Console.ReadLine();
                         try
                         {
@@ -84,6 +73,20 @@ namespace BGPSimulator
                             Console.WriteLine("The character you typed wasn't a number, try again by typing remove");
                             break;
                         }
+                        if (rnumber < Variables.as2First)
+                        {
+                            AS = 1;
+                        }
+                        else if (rnumber > Variables.as1Last && rnumber < Variables.as3First)
+                        {
+                            AS = 2;
+                        }
+                        else
+                        {
+                            AS = 3;
+                        }
+                            
+
                         address = "127." + AS + ".0." + rnumber;
                         Console.WriteLine("You are trying to remove: " + address);
                         close.CloseSpeakerlistener(address, rnumber, AS);
