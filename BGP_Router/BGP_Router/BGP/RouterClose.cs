@@ -97,7 +97,7 @@ namespace BGP_Router.BGP
                         Variables.ConnectionAndSpeaker.TryRemove(listener.Key, out stringValue);
                         Variables.ListenerConnectionAndAS.TryRemove((ushort)listener.Key, out value);
                         Variables.SpeakerConnectionAndAS.TryRemove((ushort)listener.Key, out value);
-                        //updateHandler.withadrawlRoutes(ipAddress);
+                        //UpdateHandler.withadrawlRoutes(ipAddress);
                         //listener.Value.Dispose();
                         /**
                         listener.Value.BeginDisconnect(true, DisconnectlistenerCallback, listener.Value);
@@ -135,15 +135,15 @@ namespace BGP_Router.BGP
         {
             if (adj == 1)
             {
-                updateHandler.sendNotifyMsg(adj, AS, "Router conection is Ceased");
+                UpdateHandler.sendNotifyMsg(adj, AS, "Router conection is Ceased");
             }
             if (adj == 3)
             {
-                updateHandler.sendNotifyMsg(adj, AS, "Router conection is Ceased");
+                UpdateHandler.sendNotifyMsg(adj, AS, "Router conection is Ceased");
             }
             if (adj == 4)
             {
-                updateHandler.sendNotifyMsg(adj, AS, "Router conection is Ceased");
+                UpdateHandler.sendNotifyMsg(adj, AS, "Router conection is Ceased");
             }
 
         }
@@ -151,11 +151,11 @@ namespace BGP_Router.BGP
         {
             Variables.Data = Routing_table.GetTable();
             Console.WriteLine("Local Policy For AS1, AS2 and AS3 is UPDATED");
-            updateHandler.adj_RIB_Out();
+            UpdateHandler.adj_RIB_Out();
             //createUpdate.withadrawlRoutes("");
-            updateHandler.pathAttribute();
-            updateHandler.networkLayerReachibility();
-            updateHandler.pathSegment();
+            UpdateHandler.pathAttribute();
+            UpdateHandler.networkLayerReachibility();
+            UpdateHandler.pathSegment();
         }
         /**
 
