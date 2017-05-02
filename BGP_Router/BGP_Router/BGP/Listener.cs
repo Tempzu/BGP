@@ -22,8 +22,8 @@ namespace BGP_Router.BGP
 
         public void Listen(int backlog)
         {
-            /*Enables the current socket to listen for incoming connection attempts; backlog is 
-            the maximum number of incoming connections that can be queued for acceptance. */
+        /*Enables the current socket to listen for incoming connection attempts; backlog is 
+        the maximum number of incoming connections that can be queued for acceptance. */
             
         mSocketListener.Listen(backlog);
         }
@@ -117,7 +117,7 @@ namespace BGP_Router.BGP
                 Open openPacket = new Open(Variables.BGPVersion, Variables.SpeakerConnectionAndAS[(ushort)Variables.SendMsgCount], Variables.HoldTime,
                    "" + IPAddress.Parse(((IPEndPoint)tempSock.LocalEndPoint).Address.ToString()), Variables.OptimalParameterLength);
                 mMessageType = "OPEN";
-                Console.WriteLine("#### BGP Listener:" + IPAddress.Parse(((IPEndPoint)tempSock.LocalEndPoint).Address.ToString()) + " has sent an OPEN message ####");
+                Console.WriteLine("#### Listener:" + IPAddress.Parse(((IPEndPoint)tempSock.LocalEndPoint).Address.ToString()) + " has sent an OPEN message ####");
                 SendSpeaker(openPacket.BGPmessage, tempSock, mMessageType);
 
                 Variables.SendMsgCount++;
@@ -130,7 +130,7 @@ namespace BGP_Router.BGP
             {
                 Socket tempSock = Variables.ListenerSocketDictionary[Variables.KeepAliveMsgSendCount];
                 KeepAlive keepAlivePacket = new KeepAlive();
-                Console.WriteLine("#### BGP Listener:" + IPAddress.Parse(((IPEndPoint)tempSock.LocalEndPoint).Address.ToString()) + " has sent a KEEPALIVE message ####");
+                Console.WriteLine("#### Listener:" + IPAddress.Parse(((IPEndPoint)tempSock.LocalEndPoint).Address.ToString()) + " has sent a KEEPALIVE message ####");
                 SendSpeaker(keepAlivePacket.BGPmessage, tempSock, mMessageType);
 
                 Variables.KeepAliveMsgSendCount++;
@@ -149,7 +149,7 @@ namespace BGP_Router.BGP
                     KeepAlive keepAlivePacket = new KeepAlive();
                     mMessageType = "KeepAlive";
                     SendKeepAlive.WaitOne();
-                    Console.WriteLine("#### BGP Listener:" + IPAddress.Parse(((IPEndPoint)tempSock.LocalEndPoint).Address.ToString()) + " has sent a KEEPALIVE expired message ####");
+                    Console.WriteLine("#### Listener:" + IPAddress.Parse(((IPEndPoint)tempSock.LocalEndPoint).Address.ToString()) + " has sent a KEEPALIVE expiration message ####");
                     SendKeepAlive.Set();
                     SendSpeaker(keepAlivePacket.BGPmessage, tempSock, mMessageType);
                     Variables.KeepAliveExpiredCount++;
