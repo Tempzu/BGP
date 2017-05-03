@@ -394,7 +394,7 @@ namespace BGP_Router.Masiina
             Listener bgpListener = new Listener();
             Speaker bgpSpeaker = new Speaker();
             String adjRIBItem;
-            Console.WriteLine("Poistettava reitti nro: " + removedRouteN);
+            Console.WriteLine("Route about to be removed: " + removedRouteN);
             /*Console.WriteLine("NLRI ennen kaatuilua:"+Variables.NLRI[removedRouteN]);
             //Tuple<int, string> nlri = Variables.NLRI[removedRouteN];
             Tuple<int, string> nlri = (5, "127.2");
