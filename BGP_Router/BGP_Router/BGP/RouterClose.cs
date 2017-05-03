@@ -41,31 +41,13 @@ namespace BGP_Router.BGP
                     if (ipAddress == "" + IPAddress.Parse(((IPEndPoint)speaker.Value.LocalEndPoint).Address.ToString()))
                     {
                         Console.WriteLine("Shutdown Connection with Speaker with IP: " + IPAddress.Parse(((IPEndPoint)speaker.Value.LocalEndPoint).Address.ToString()));
-                        SpeakerSocket_DictionaryCopy.Add(speaker.Key, speaker.Value);
-                        // Release the socket.                       
+                        SpeakerSocket_DictionaryCopy.Add(speaker.Key, speaker.Value);                   
                         Variables.SpeakerAS.TryRemove("" + IPAddress.Parse(((IPEndPoint)speaker.Value.LocalEndPoint).Address.ToString()), out value);
                         Variables.ConnectionAndSpeaker.TryRemove(speaker.Key, out stringValue);
                         Variables.ConnectionAndListener.TryRemove(speaker.Key, out stringValue);
                         Variables.SpeakerConnectionAndAS.TryRemove((ushort)speaker.Key, out value);
                         Variables.ListenerConnectionAndAS.TryRemove((ushort)speaker.Key, out value);
                         tempAS = value;
-
-                        //Variables.SpeakerSocket_Dictionary.Remove(speaker.Key);
-                        //speaker.Value.Dispose();
-
-
-                        /**
-                        speaker.Value.BeginDisconnect(true, DisconnectSpeakerCallback, speaker.Value);
-
-                        // Wait for the disconnect to complete.
-                        disconnectSpeakerDone.WaitOne();
-                        if (speaker.Value.Connected)
-                            Console.WriteLine("We're still connected");
-                        else
-                            Console.WriteLine("We're disconnected");
-                        speaker.Value.Shutdown(SocketShutdown.Both);
-                        speaker.Value.Close();
-                        **/
                     }
                 }
                 catch (Exception ex)
@@ -91,29 +73,12 @@ namespace BGP_Router.BGP
                     if (ipAddress == "" + IPAddress.Parse(((IPEndPoint)listener.Value.LocalEndPoint).Address.ToString()))
                     {
                         Console.WriteLine("Shutdown Connection with listener with IP: " + IPAddress.Parse(((IPEndPoint)listener.Value.LocalEndPoint).Address.ToString()));
-                        // Release the socket.
-
-                        //Variables.ListenerSocketDictionary.Remove(listener.Key);
                         ListenerSocket_DictionaryCopy.Add(listener.Key, listener.Value);
                         Variables.ListenerAS.TryRemove("" + IPAddress.Parse(((IPEndPoint)listener.Value.LocalEndPoint).Address.ToString()), out value);
                         Variables.ConnectionAndListener.TryRemove(listener.Key, out stringValue);
                         Variables.ConnectionAndSpeaker.TryRemove(listener.Key, out stringValue);
                         Variables.ListenerConnectionAndAS.TryRemove((ushort)listener.Key, out value);
                         Variables.SpeakerConnectionAndAS.TryRemove((ushort)listener.Key, out value);
-                        //UpdateHandler.withadrawlRoutes(ipAddress);
-                        //listener.Value.Dispose();
-                        /**
-                        listener.Value.BeginDisconnect(true, DisconnectlistenerCallback, listener.Value);
-
-                        // Wait for the disconnect to complete.
-                        disconnectlistenerDone.WaitOne();
-                        if (listener.Value.Connected)
-                            Console.WriteLine("We're still connected");
-                        else
-                            Console.WriteLine("We're disconnected");
-                        listener.Value.Shutdown(SocketShutdown.Both);
-                        listener.Value.Close();
-        **/
                     }
                 }
                 catch (Exception ex)
@@ -129,62 +94,23 @@ namespace BGP_Router.BGP
         }
         public void withadrawlRoutes(string ipPrefix, int rnumber, int removedRouteN, int AS)
         {
-            //Variables.withdrawnRoutes.Clear();
             Tuple<string, int> withdrawl_Routes = new Tuple<string, int>(ipPrefix, ipPrefix.Length);
-            //Variables.withdrawl_IP_Address = ipPrefix;
             Console.WriteLine("Trying to remove router number: " + rnumber + ", from AS: " + AS);
             Variables.WithdrawnRoutes.Add(removedRouteN, withdrawl_Routes);
         }
         public void sendNotificationMsg(int removedRouteN, int AS)
         {
-           /* if (rnumber == 1)
-            {*/
                 UpdateHandler.sendNotifyMsg(removedRouteN, AS, "Router connection is removed");
-            /*}
-            if (rnumber == 3)
-            {
-                UpdateHandler.sendNotifyMsg(rnumber, AS, "Router conection is Ceased");
-            }
-            if (rnumber == 4)
-            {
-                UpdateHandler.sendNotifyMsg(rnumber, AS, "Router conection is Ceased");
-            }*/
-
         }
         public void update()
         {
             Variables.Data = Routing_table.GetTable();
-            Console.WriteLine("Local Policy For AS1, AS2 and AS3 is UPDATED");
+            Console.WriteLine("Local Policy For AS1, AS2, and AS3 is UPDATED");
             UpdateHandler.adj_RIB_Out();
-            //createUpdate.withadrawlRoutes("");
             UpdateHandler.pathAttribute();
             UpdateHandler.networkLayerReachibility();
             UpdateHandler.pathSegment();
         }
-        /**
-
-        private static void DisconnectSpeakerCallback(IAsyncResult ar)
-        {
-            // Complete the disconnect request.
-            Socket client = (Socket)ar.AsyncState;
-            client.EndDisconnect(ar);
-            //client.Close();
-            // Signal that the disconnect is complete.
-            disconnectSpeakerDone.Set();
-           
-        }
-
-        private static void DisconnectlistenerCallback(IAsyncResult ar)
-        {
-            // Complete the disconnect request.
-            Socket listener = (Socket)ar.AsyncState;
-            listener.EndDisconnect(ar);
-            //listener.Close();
-            // Signal that the disconnect is complete.
-            disconnectlistenerDone.Set();
-        }
-
-    **/
     }
 
 }
