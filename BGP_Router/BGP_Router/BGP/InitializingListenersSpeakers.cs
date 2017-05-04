@@ -14,14 +14,11 @@ namespace BGP_Router.BGP
 
         private static AutoResetEvent speakerConnectionRequest = new AutoResetEvent(true);
 
+        //counters for listeners and speakers
         int m = 0;
         int n = 0;
+        
         public ushort AS;
-        //variables to help in splitting routers into 3 AS
-        int as1Last;
-        int as2First;
-        int as2Last;
-        int as3First;
         string temp;
 
         public void StartListener() // user can configure the autonomous systems
