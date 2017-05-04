@@ -22,7 +22,7 @@ namespace BGP_Router.BGP
             ushort PacketLength = BitConverter.ToUInt16(Packet, 32);
             ushort PacketType = BitConverter.ToUInt16(Packet, 38);
 
-            Console.Write("\n*************************************************************\nRouter with IP: " + IPAddress.Parse(((IPEndPoint)ClientSocket.LocalEndPoint).Address.ToString()) + " has recieved a packet. \nStarting packet marker checkup!\n");
+            Console.Write("\n*************************************************************\nRouter with IP: " + IPAddress.Parse(((IPEndPoint)ClientSocket.LocalEndPoint).Address.ToString()) + " has received a packet. \nStarting packet marker checkup!\n");
 
             for (int i = 0; i < 16; i++)
             {
