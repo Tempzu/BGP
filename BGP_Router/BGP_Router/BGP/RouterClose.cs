@@ -95,7 +95,7 @@ namespace BGP_Router.BGP
         public void withadrawlRoutes(string ipPrefix, int rnumber, int removedRouteN, int AS)
         {
             Tuple<string, int> withdrawl_Routes = new Tuple<string, int>(ipPrefix, ipPrefix.Length);
-            Console.WriteLine("Trying to remove router number: " + rnumber + ", from AS: " + AS);
+            Console.WriteLine("Removed router number: " + rnumber + ", from AS: " + AS);
             Variables.WithdrawnRoutes.Add(removedRouteN, withdrawl_Routes);
         }
         public void sendNotificationMsg(int removedRouteN, int AS)
