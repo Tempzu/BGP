@@ -85,7 +85,7 @@ namespace BGP_Router.BGP
                 Variables.as3First = 9;
             }
             Console.WriteLine("\nConnections will be now created. Below you can see available commands.\n");
-            Console.WriteLine("Type 'update' to enforce local policy. This must be done in order to update routing tables.");
+            Console.WriteLine("Type 'update' to enforce local policy. This must be done in order to view routing tables first time.");
             Console.WriteLine("Type 'as1', 'as2' or 'as3' to see routing tables.");
             Console.WriteLine("Type 'remove' to close a router.");
             Console.WriteLine("Type 'help' for commands.");
