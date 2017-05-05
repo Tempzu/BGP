@@ -25,7 +25,7 @@ namespace BGP_Router.BGP
             closeSpeaker(ipAddress);
             closelistener(ipAddress);
             Variables.removedRouteN++;
-            Console.WriteLine("Routes closed: " + Variables.removedRouteN);
+            Console.WriteLine("Routers closed: " + Variables.removedRouteN);
             withadrawlRoutes(ipAddress, rnumber, Variables.removedRouteN, AS);
             update();
             sendNotificationMsg(Variables.removedRouteN, AS);
