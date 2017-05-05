@@ -14,7 +14,7 @@ namespace BGP_Router.BGP
 
         private static AutoResetEvent speakerConnectionRequest = new AutoResetEvent(true);
 
-        //counters for listeners and speakers
+        //counters for speakers
         int m = 0;
         int n = 0;
         
@@ -91,7 +91,7 @@ namespace BGP_Router.BGP
             Console.WriteLine("Type 'help' for commands.");
             Thread.Sleep(3000);
 
-            // Now that the user has configured the autonomous systems, we can create the listener routers to the according ASs.
+            // Now that the user has configured the autonomous systems, we can create the listeners for routers to the according ASs.
             Console.Write("\n----Setting up routers to the autonomous systems----\n");
             for (int i = 0; i < 10; i++)
             {
@@ -235,7 +235,7 @@ namespace BGP_Router.BGP
             for (int k = 0; k < 10; k++)
             {
 
-                //creating speakers to AS1
+                //initializing speakers for AS1
                 if (k < Variables.as2First)
                 {
 
